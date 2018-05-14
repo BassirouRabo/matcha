@@ -1,25 +1,55 @@
+
 buildscript {
     ext.kotlin_version = '1.2.41'
+    ext.ktor_version = '0.9.2'
 
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
     }
 }
 
 group '1'
 version '1.0-SNAPSHOT'
 
+apply plugin: 'application'
 apply plugin: 'kotlin'
 
+sourceCompatibility = 1.8
+
+mainClassName = 'io.ktor.server.netty.DevelopmentEngine'
+
 repositories {
+    jcenter()
     mavenCentral()
+    maven { url  "https://dl.bintray.com/kotlin/exposed" }
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5'
+    compile 'org.jetbrains.exposed:exposed:0.10.2'
+
+    compile "io.ktor:ktor-client-core:$ktor_version"
+    compile "io.ktor:ktor-server-netty:$ktor_version"
+    compile "io.ktor:ktor-html-builder:$ktor_version"
+    compile "io.ktor:ktor-auth:$ktor_version"
+    compile "io.ktor:ktor-locations:$ktor_version"
+    compile "io.ktor:ktor-client-apache:$ktor_version"
+    compile "io.ktor:ktor-network:$ktor_version"
+
+    compile "ch.qos.logback:logback-classic:1.2.1"
+    compile "mysql:mysql-connector-java:8.0.11"
+    compile group: 'com.h2database', name: 'h2', version: '1.0.60'
+   // compile "postgresql:postgresql:9.1-901-1.jdbc4"
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
+
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 compileKotlin {
@@ -27,4 +57,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
