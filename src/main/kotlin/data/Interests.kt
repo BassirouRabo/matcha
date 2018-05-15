@@ -11,9 +11,13 @@ object Interests : IntIdTable() {
     val favoris : Column<String> = varchar("favoris", 50)
 }
 
-class Interest(id: EntityID<Int>) : IntEntity(id) {
+
+class Interest(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<Interest>(Interests)
 
     var userId by Interests.userId
     var favoris by Interests.favoris
 }
+
+data class InterestData(val userId: EntityID<Int>,
+                        val favoris: String)

@@ -11,11 +11,16 @@ object Chats : IntIdTable() {
     val date : Column<DateTime> = datetime("date")
 }
 
-class Chat(id: EntityID<Int>) : IntEntity(id) {
+class Chat(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<Chat>(Chats)
 
     var user1Id by Chats.user1Id
     var user2Id by Chats.user2Id
-    val message by Chats.message
-    val date by Chats.date
+    var message by Chats.message
+    var date by Chats.date
 }
+
+data class ChatData(val user1Id: EntityID<Int>,
+                     val user2Id: EntityID<Int>,
+                     val message : String,
+                     val date: DateTime)

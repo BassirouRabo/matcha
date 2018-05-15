@@ -13,10 +13,14 @@ object Visits : IntIdTable() {
     val date : Column<DateTime> = datetime("date")
 }
 
-class Visit(id: EntityID<Int>) : IntEntity(id) {
+class Visit(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<Visit>(Visits)
 
     var user1Id by Visits.user1Id
     var user2Id by Visits.user2Id
-    val date by Visits.date
+    var date by Visits.date
 }
+
+data class VisitData(val user1Id: EntityID<Int>,
+                     val user2Id: EntityID<Int>,
+                     val date: DateTime)

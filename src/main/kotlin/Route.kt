@@ -24,7 +24,7 @@ fun Routing.homeRoute() {
                 call.respondRedirect(application.locations.href(LoginUrl()))
             else
                 call.homePage()*/
-            call.homePage()
+
         }
     }
 }
