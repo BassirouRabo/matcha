@@ -1,4 +1,5 @@
 
+import data.UserData
 import io.ktor.application.ApplicationCall
 import io.ktor.application.application
 import io.ktor.application.call
@@ -6,6 +7,8 @@ import io.ktor.locations.get
 import io.ktor.locations.locations
 import io.ktor.locations.*
 import io.ktor.locations.post
+import io.ktor.request.receive
+import io.ktor.request.receiveParameters
 import io.ktor.request.uri
 import io.ktor.response.respondRedirect
 import io.ktor.response.respondText
@@ -50,13 +53,15 @@ fun Routing.logoutRoute() {
 }
 
 fun Routing.registerRoute() {
-    location<RegisterUrl> {
+   location<RegisterUrl> {
         get{
-            call.registerPage()
         }
 
         post {
-
+            val user = call.receive<UserData>()
+            val params = call.receiveParameters()
+            params["username"]
+            println("Username " + user.username)
         }
     }
 }
