@@ -1,0 +1,3 @@
+package repository
+
+object InterestRepository

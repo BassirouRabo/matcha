@@ -14,6 +14,7 @@ import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
+import org.jetbrains.exposed.sql.Database
 
 @Location("/") class homeUrl()
 @Location("/login") class LoginUrl()
@@ -25,6 +26,9 @@ import kotlinx.html.stream.createHTML
 data class Session(val user: String)
 
 fun Application.main() {
+    db.connect()
+    db.init()
+
     install(DefaultHeaders)
     install(CallLogging)
     install(Locations)
@@ -32,7 +36,6 @@ fun Application.main() {
     install(Sessions) {
         cookie<Session>(SESSION)
     }
-
     install(Routing) {
         homeRoute()
         loginRoute()
