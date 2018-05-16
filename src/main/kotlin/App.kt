@@ -16,14 +16,14 @@ import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 import org.jetbrains.exposed.sql.Database
 
-@Location("/") class homeUrl()
+@Location("/") class HomeUrl()
 @Location("/login") class LoginUrl()
 @Location("/logout") class LogoutUrl()
 @Location("/register") class RegisterUrl()
 @Location("/activate") class ActivateUrl()
 @Location("/{username}") data class UserUrl(val username : String)
 
-data class Session(val user: String)
+data class Session(val username: String)
 
 fun Application.main() {
     db.connect()

@@ -41,6 +41,7 @@ dependencies {
     compile "io.ktor:ktor-locations:$ktor_version"
     compile "io.ktor:ktor-client-apache:$ktor_version"
     compile "io.ktor:ktor-network:$ktor_version"
+    compile "io.ktor:ktor-gson:$ktor_version"
 
     compile "ch.qos.logback:logback-classic:1.2.1"
     compile "org.postgresql:postgresql:42.2.2"

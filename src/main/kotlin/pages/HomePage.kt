@@ -10,18 +10,36 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import repository.UserRepository
 import data.User
 import data.UserData
+import io.ktor.html.respondHtml
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
+import kotlinx.html.body
+import kotlinx.html.head
+import kotlinx.html.*
+import Session
+import io.ktor.locations.locations
+import LogoutUrl
 
 
 suspend fun ApplicationCall.homePage() {
-   val cards : Array<String?> = arrayOf("Monday", null, "Wednesday")
-    cards.forEach { it?.let { println(it) } }
+    respondHtml {
+        head {
+            title("Home Page")
+        }
+        body {
+            h1{
+                + " HOME PAGE  ${request.uri}  "
+            }
 
-    transaction {
-        logger.addLogger(StdOutSqlLogger)
-        val add: User? = UserRepository.add(UserData("username4", "email", "first name", "last name", 20, "password", "photo", M, "biographie", true, 255))
-
-
-        UserRepository.getAll().forEach { println(it.toString()) }
+            p{
+                + "Welcome "
+                b { + "${sessions.get<Session>()?.username}"}
+            }
+            p{
+                a(href = application.locations.href(LogoutUrl())) {
+                    + "Logout"
+                }
+            }
+        }
     }
-    respondText { request.uri }
 }

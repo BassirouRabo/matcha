@@ -15,13 +15,6 @@ import repository.UserRepository
 import RegisterUrl
 
 suspend fun ApplicationCall.registerPage() {
-
-    transaction {
-        logger.addLogger(StdOutSqlLogger)
-        val user = UserRepository.get(1)
-        println("  USER " + user?.username)
-    }
-
     respondHtml {
         head {
             title {  + "Register pager" }
@@ -70,7 +63,6 @@ suspend fun ApplicationCall.registerPage() {
                     p {
                         fileInput(name = "photo") {
                             placeholder = "photo"
-                            required = true
                         }
                     }
                     p {

@@ -1,5 +1,3 @@
 package repository
 
-object VisitRepository {
-
-}
+object VisitRepository
