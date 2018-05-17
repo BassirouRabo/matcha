@@ -1,1 +1,1 @@
-enum class Gender { M, G }
+enum class Gender { M, F }

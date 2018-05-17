@@ -37,14 +37,14 @@ class User(id: EntityID<Int>): IntEntity(id) {
     var code by Users.code
 }
 
-data class UserData(val username: String,
-                    val email: String,
-                    val firstName: String,
-                    val lastName: String,
-                    val age: Int,
-                    val password: String,
-                    val photo: String,
-                    val gender: Gender,
-                    val biography: String = "",
-                    val isActivate: Boolean = false,
-                    val code: Int)
+data class UserData(var username: String,
+                    var email: String,
+                    var firstName: String,
+                    var lastName: String,
+                    var age: Int,
+                    var password: String,
+                    var photo: String,
+                    var gender: Gender,
+                    var biography: String = "",
+                    var isActivate: Boolean = false,
+                    var code: Int)

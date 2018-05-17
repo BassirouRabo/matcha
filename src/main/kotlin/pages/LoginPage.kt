@@ -19,7 +19,7 @@ suspend fun ApplicationCall.loginPage() {
             h1 { + "Login page" }
             form(locations.href(LoginUrl()), encType = FormEncType.multipartFormData, method = FormMethod.post) {
                 div{
-                    p{
+                    p {
                         textInput(name = Users.username.name) {
                             placeholder = "Username"
                             required = true
