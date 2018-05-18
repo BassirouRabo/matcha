@@ -1,20 +1,12 @@
 
 import io.ktor.application.*
-import io.ktor.auth.*
+import io.ktor.content.*
 import io.ktor.features.*
-import io.ktor.html.respondHtml
-import io.ktor.http.*
 import io.ktor.locations.*
-import io.ktor.request.receiveOrNull
-import io.ktor.request.uri
-import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.sessions.SessionStorageMemory
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
-import kotlinx.html.*
-import kotlinx.html.stream.createHTML
-import org.jetbrains.exposed.sql.Database
+import java.io.File
 
 @Location("/") class HomeUrl()
 @Location("/login") class LoginUrl()
@@ -37,6 +29,9 @@ fun Application.main() {
         cookie<Session>(SESSION)
     }
     install(Routing) {
+        static("public") {
+            files("src/main/resources")
+        }
         homeRoute()
         loginRoute()
         logoutRoute()
