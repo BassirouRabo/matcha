@@ -6,7 +6,8 @@ import io.ktor.request.uri
 import io.ktor.response.respondText
 
 import UserUrl
+import data.User
 
-suspend fun ApplicationCall.userPage(userUrl: UserUrl) {
-    respondText { request.uri + " " + userUrl.username }
+suspend fun ApplicationCall.userPage(user: User) {
+    respondText { request.uri + " " + user.username }
 }

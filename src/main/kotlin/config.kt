@@ -18,3 +18,7 @@ object db {
         }
     }
 }
+
+enum class Gender { M, F }
+
+enum class Favori { A, B, C, D}

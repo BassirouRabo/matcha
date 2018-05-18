@@ -115,7 +115,7 @@ fun Routing.registerRoute() {
                 transaction {
                     logger.addLogger(StdOutSqlLogger)
                     val user: User? = UserRepository.getByUsername(username!!)
-                    if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = biographie!!, photo = photo ?: "photo.jpg", isActivate = false, code = 255, gender = if(gender.equals("M")) M else F))
+                    if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = biographie!!, photo = photo ?: "photo.jpg", isActivate = false, code = 1234, gender = if(gender.equals("M")) M else F))
                 }
                 call.respondRedirect(application.locations.href(LoginUrl()))
             }
@@ -157,10 +157,14 @@ fun Routing.activateRoute() {
 
 fun Routing.userRoute() {
     get<UserUrl> { userUrl ->
-        if (call.sessions.get<Session>() == null)
-            call.respondRedirect(application.locations.href(LoginUrl()))
-        else
-            call.userPage(userUrl)
+        var user: User? = null
+        if (call.sessions.get<Session>() == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        else {
+            transaction {
+                user = UserRepository.getByUsername(userUrl.username)
+            }
+            if (user == null) call.respondRedirect(application.locations.href(HomeUrl())) else call.userPage(user!!)
+        }
     }
 
     post<UserUrl> { userUrl ->
