@@ -31,6 +31,7 @@ fun Application.main() {
     install(Routing) {
         static("public") {
             files("src/main/resources")
+            default("index.html")
         }
         homeRoute()
         loginRoute()

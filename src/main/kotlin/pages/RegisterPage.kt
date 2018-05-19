@@ -14,7 +14,7 @@ suspend fun ApplicationCall.registerPage() {
         }
         body {
             h1 { + "Register page" }
-            form(locations.href(RegisterUrl()), encType = FormEncType.multipartFormData, method = FormMethod.post) {
+            form(locations.href(RegisterUrl()), encType = FormEncType.multipartFormData, method = FormMethod.post)  {
                 div{
                     p{
                         textInput(name = Users.username.name) {
@@ -229,7 +229,16 @@ suspend fun ApplicationCall.registerPage() {
                                                             div(classes = "sn-field") {
                                                                 textInput {
                                                                     name = "name"
-                                                                    placeholder = "Full Name"
+                                                                    placeholder = "First Name"
+                                                                }
+                                                                i(classes = "la la-user") {}
+                                                            }
+                                                        }
+                                                        div(classes = "col-lg-12 no-pdd") {
+                                                            div(classes = "sn-field") {
+                                                                textInput {
+                                                                    name = "name"
+                                                                    placeholder = "Lat Name"
                                                                 }
                                                                 i(classes = "la la-user") {}
                                                             }
