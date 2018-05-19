@@ -1,5 +1,6 @@
 package pages
 
+import data.Users
 import io.ktor.application.ApplicationCall
 import io.ktor.html.respondHtml
 import kotlinx.html.body
@@ -144,7 +145,7 @@ suspend fun ApplicationCall.registerPage() {
                                 div(classes = "col-lg-6") {
                                     div(classes = "cmp-info") {
                                         div(classes = "cm-logo") { }
-                                        img(src = "public/images/logo_42.png") {
+                                        img(src = "public/images/logo_42_dating.png") {
                                             alt = ""
                                         }
                                     }
@@ -168,14 +169,12 @@ suspend fun ApplicationCall.registerPage() {
                                             }
                                         }
                                         div(classes = "sign_in_sec current") {
-                                            id = "tab-1"
-                                            h3 { + "Sign in" }
                                             form() {
                                                 div(classes = "row") {
                                                     div(classes = "col-lg-12 no-pdd") {
                                                         div(classes = "sn-field") {
                                                             textInput() {
-                                                                name = "username"
+                                                                name = Users.username.name
                                                                 placeholder = "Username"
                                                             }
                                                             i(classes = "la la-user") {}
@@ -184,29 +183,10 @@ suspend fun ApplicationCall.registerPage() {
                                                     div(classes = "col-lg-12 no-pdd") {
                                                         div(classes = "sn-field") {
                                                             passwordInput {
-                                                                name = "password"
+                                                                name = Users.password.name
                                                                 placeholder = "Password"
                                                             }
                                                             i(classes = "la la-lock") {}
-                                                        }
-                                                    }
-                                                    div(classes = "col-lg-12 no-pdd") {
-                                                        div(classes = "checky-sec") {
-                                                            div(classes = "fgt-sec") {
-                                                                checkBoxInput() {
-                                                                    name = "cc"
-                                                                    id = "c1"
-                                                                }
-                                                                label() {
-                                                                    htmlFor = "c1"
-                                                                    span {  }
-                                                                }
-                                                                small { + "Remember me" }
-                                                            }
-                                                            a(href = "#") {
-                                                                title = ""
-                                                                + "Forgot Password?"
-                                                            }
                                                         }
                                                     }
                                                     div(classes = "col-lg-12 no-pdd") {
@@ -228,7 +208,7 @@ suspend fun ApplicationCall.registerPage() {
                                                         div(classes = "col-lg-12 no-pdd") {
                                                             div(classes = "sn-field") {
                                                                 textInput {
-                                                                    name = "name"
+                                                                    name = Users.firstName.name
                                                                     placeholder = "First Name"
                                                                 }
                                                                 i(classes = "la la-user") {}
@@ -237,8 +217,26 @@ suspend fun ApplicationCall.registerPage() {
                                                         div(classes = "col-lg-12 no-pdd") {
                                                             div(classes = "sn-field") {
                                                                 textInput {
-                                                                    name = "name"
-                                                                    placeholder = "Lat Name"
+                                                                    name = Users.lastName.name
+                                                                    placeholder = "Last Name"
+                                                                }
+                                                                i(classes = "la la-user") {}
+                                                            }
+                                                        }
+                                                        div(classes = "col-lg-12 no-pdd") {
+                                                            div(classes = "sn-field") {
+                                                                textInput {
+                                                                    name = Users.username.name
+                                                                    placeholder = "Username"
+                                                                }
+                                                                i(classes = "la la-user") {}
+                                                            }
+                                                        }
+                                                        div(classes = "col-lg-12 no-pdd") {
+                                                            div(classes = "sn-field") {
+                                                                emailInput {
+                                                                    name = Users.email.name
+                                                                    placeholder = "Email"
                                                                 }
                                                                 i(classes = "la la-user") {}
                                                             }
@@ -255,12 +253,16 @@ suspend fun ApplicationCall.registerPage() {
                                                         div(classes = "col-lg-12 no-pdd") {
                                                             div(classes = "sn-field") {
                                                                 select(classes = "") {
-                                                                    option() { + "Category"}
+                                                                    option() {
+                                                                        value = Gender.M.toString()
+                                                                        + "M"
+                                                                    }
+                                                                    option() {
+                                                                        value = Gender.F.toString()
+                                                                        + "F"
+                                                                    }
                                                                 }
-                                                                i(classes = "la la-dropbox") {}
-                                                                span {
-                                                                    i(classes = "fa fa-ellipsis-h") {}
-                                                                }
+                                                                i(classes = "la la-globe") {}
                                                             }
                                                         }
                                                         div(classes = "col-lg-12 no-pdd") {
@@ -279,21 +281,6 @@ suspend fun ApplicationCall.registerPage() {
                                                                     placeholder = "Repeat Password"
                                                                 }
                                                                 i(classes = "la la-lock")
-                                                            }
-                                                        }
-                                                        div(classes = "col-lg-12 no-pdd") {
-                                                            div(classes = "checky-sec st2") {
-                                                                div(classes = "fgt-sec") {
-                                                                    checkBoxInput() {
-                                                                        name = "cc"
-                                                                        id = "c2"
-                                                                    }
-                                                                    label() {
-                                                                        htmlFor = "c2"
-                                                                        span {  }
-                                                                    }
-                                                                    small { + "Yes, I understand and agree to the workwise Terms & Conditions." }
-                                                                }
                                                             }
                                                         }
                                                         div(classes = "col-lg-12 no-pdd") {
