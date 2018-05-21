@@ -14,6 +14,7 @@ import java.io.File
 @Location("/register") class RegisterUrl()
 @Location("/activate") class ActivateUrl()
 @Location("/{username}") data class UserUrl(val username : String)
+@Location("/{username}/chats") data class ChatUrl(val username: String)
 
 data class Session(val username: String)
 
@@ -39,6 +40,7 @@ fun Application.main() {
         registerRoute()
         activateRoute()
         userRoute()
+        chatRoute()
     }
 }
 

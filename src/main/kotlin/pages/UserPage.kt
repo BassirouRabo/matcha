@@ -1,5 +1,3 @@
-package pages
-
 import io.ktor.application.ApplicationCall
 import io.ktor.locations.Location
 import io.ktor.request.uri
@@ -11,7 +9,7 @@ import kotlinx.html.*
 
 suspend fun ApplicationCall.userPage(user: User) {
     respondHtml {
-       head {
+        head {
             meta(charset = "UTF-8")
             title{ + "42 Date | Home" }
             meta(name = "viewport") {
@@ -165,7 +163,7 @@ suspend fun ApplicationCall.userPage(user: User) {
                         src = "http://via.placeholder.com/1600x400"
                         alt = ""
                     }
-                    a() {
+                    a {
                         href = "#"
                         title = ""
                         + "Change Image"
@@ -186,6 +184,18 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                     img() {
                                                         src = "http://via.placeholder.com/170x170"
                                                         alt = ""
+                                                    }
+                                                }
+                                                div(classes = "user_pro_status") {
+                                                    ul(classes = "flw-hr") {
+                                                        li {
+                                                            a(classes = "flww") {
+                                                                href = "#"
+                                                                title = ""
+                                                                i(classes = "la la-plus")
+                                                                + "Follow"
+                                                            }
+                                                        }
                                                     }
                                                 }
                                                 ul(classes = "social_links") {
@@ -220,46 +230,22 @@ suspend fun ApplicationCall.userPage(user: User) {
                                     div(classes = "col-lg-6") {
                                         div(classes = "main-ws-sec") {
                                             div(classes = "user-tab-sec") {
-                                                h3 { + "Brabo-hi" }
-                                                div (classes = "star-descp") {
+                                                h3 { + "Brabo Hi" }
+                                                div(classes = "star-descp") {
                                                     span { + "Bassirou Rabo Hima" }
                                                 }
-                                                div(classes = "tab-feed st2") {
+                                                div(classes = "tab-feed") {
                                                     ul {
                                                         li(classes = "active") {
                                                             attributes["data-tab"] = "info-dd"
                                                             a {
                                                                 href = "#"
                                                                 title = ""
-                                                                img() {
-                                                                    src = "public/images/ic2.png"
+                                                                img {
+                                                                    src = "images/ic2.png"
                                                                     alt = ""
                                                                 }
                                                                 span { + "Info" }
-                                                            }
-                                                        }
-                                                        li(classes = "") {
-                                                            attributes["data-tab"] = "saved-jobs"
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic4.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { + "Like 35.000" }
-                                                            }
-                                                        }
-                                                        li(classes = "") {
-                                                            attributes["data-tab"] = "my-bids"
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic5.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { + "Liked 45.000" }
                                                             }
                                                         }
                                                         li(classes = "") {
@@ -268,22 +254,10 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                                 href = "#"
                                                                 title = ""
                                                                 img {
-                                                                    src = "public/images/ic3.png"
+                                                                    src = "images/ic3.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Visits" }
-                                                            }
-                                                        }
-                                                        li(classes = "") {
-                                                            attributes["data-tab"] = "payment-dd"
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic6.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { + "Visited" }
+                                                                span { + "Photos" }
                                                             }
                                                         }
                                                     }
@@ -292,58 +266,16 @@ suspend fun ApplicationCall.userPage(user: User) {
                                             div(classes = "product-feed-tab current") {
                                                 id = "info-dd"
                                                 div(classes = "user-profile-ov") {
-                                                    h3(classes = "") {
-                                                        a(classes = "overview-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            + "Overview"
-                                                        }
-                                                        a(classes = "overview-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-pencil") { }
-                                                        }
-                                                    }
-                                                    p { + "Zappy is an entirely automatic game where some computer programs play amongst them-selves. The game speed is defined by a time unit. Each action in the game has a durationproportionate to this time unit." }
+                                                    h3 { + "Overview" }
+                                                    p { + "Zappy is an entirely automatic game where some computer programs play amongst them-selves." }
                                                 }
                                                 div(classes = "user-profile-ov") {
-                                                    h3 {
-                                                        a(classes = "lct-box-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            + "Location"
-                                                        }
-                                                        a(classes = "lct-box-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-pencil") { }
-                                                        }
-                                                        a(classes = "") {
-                                                            href = "#"
-                                                            i(classes = "fa fa-plus-square") { }
-                                                        }
-                                                    }
+                                                    h3 { + "Location" }
                                                     h4 { + "Fremont" }
-                                                    p { + "16600 Dumbarton Circle " }
+                                                    p { + "6600 Dumbarton circle" }
                                                 }
                                                 div(classes = "user-profile-ov") {
-                                                    h3 {
-                                                        a(classes = "skills-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            + "Skills"
-                                                        }
-                                                        a(classes = "skills-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i (classes = "fa fa-pencil") { }
-                                                        }
-                                                        a(classes = "") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i (classes = "fa fa-plus-square") { }
-                                                        }
-                                                    }
+                                                    h3 { + "Skills" }
                                                     ul {
                                                         li {
                                                             a {
@@ -359,134 +291,60 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                                 + "PHP"
                                                             }
                                                         }
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                + "CSS"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            div(classes = "product-feed-tab") {
-                                                id = "saved-jobs"
-                                                div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
-                                                                        img {
-                                                                            src = "images/clock.png"
-                                                                            alt = ""
-                                                                        }
-                                                                        + "3 min ago"
-                                                                    }
-                                                                }
-                                                            }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            div(classes = "product-feed-tab") {
-                                                id = "my-bids"
-                                                div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
-                                                                        img {
-                                                                            src = "images/clock.png"
-                                                                            alt = ""
-                                                                        }
-                                                                        + "3 min ago"
-                                                                    }
-                                                                }
-                                                            }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
-                                                                }
-                                                            }
-                                                        }
                                                     }
                                                 }
                                             }
                                             div(classes = "product-feed-tab") {
                                                 id = "portfolio-dd"
-                                                div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
+                                                div(classes = "portfolio-gallery-sec") {
+                                                    div(classes = "gallery_pf") {
+                                                        div(classes = "row") {
+                                                            div(classes = "col-lg-4 col-md-4 col-sm-6 col-6") {
+                                                                div(classes = "gallery_pt") {
+                                                                    img {
+                                                                        src = "http://via.placeholder.com/271x174"
+                                                                        alt = ""
+                                                                    }
+                                                                    a {
+                                                                        href = "#"
+                                                                        title = ""
                                                                         img {
-                                                                            src = "images/clock.png"
+                                                                            src = "images/all-out.png"
                                                                             alt = ""
                                                                         }
-                                                                        + "3 min ago"
                                                                     }
                                                                 }
                                                             }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            div(classes = "product-feed-tab") {
-                                                id = "payment-dd"
-                                                div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
+                                                            div(classes = "col-lg-4 col-md-4 col-sm-6 col-6") {
+                                                                div(classes = "gallery_pt") {
+                                                                    img {
+                                                                        src = "http://via.placeholder.com/271x174"
+                                                                        alt = ""
+                                                                    }
+                                                                    a {
+                                                                        href = "#"
+                                                                        title = ""
                                                                         img {
-                                                                            src = "images/clock.png"
+                                                                            src = "images/all-out.png"
                                                                             alt = ""
                                                                         }
-                                                                        + "3 min ago"
                                                                     }
                                                                 }
                                                             }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
+                                                            div(classes = "col-lg-4 col-md-4 col-sm-6 col-6") {
+                                                                div(classes = "gallery_pt") {
+                                                                    img {
+                                                                        src = "http://via.placeholder.com/271x174"
+                                                                        alt = ""
+                                                                    }
+                                                                    a {
+                                                                        href = "#"
+                                                                        title = ""
+                                                                        img {
+                                                                            src = "images/all-out.png"
+                                                                            alt = ""
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -497,45 +355,29 @@ suspend fun ApplicationCall.userPage(user: User) {
                                     }
                                     div(classes = "col-lg-3") {
                                         div(classes = "right-sidebar") {
-                                            div(classes = "widget widget-portfolio") {
-                                                div(classes = "wd-heady") {
-                                                    h3 { + "My Photos" }
-                                                    img {
-                                                        src = "public/images/photo-icon.png"
-                                                        alt = ""
-                                                    }
+                                            div(classes = "message-btn") {
+                                                a {
+                                                    href = "#"
+                                                    i(classes = "fa fa-envelope")
+                                                    + "Message"
                                                 }
-                                                div(classes = "pf-gallery") {
-                                                    ul {
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "http://via.placeholder.com/70x70"
-                                                                    alt = ""
-                                                                }
-                                                            }
+                                            }
+                                            div(classes = "suggestions full-width") {
+                                                div(classes = "sd-title") {
+                                                    h3 { + "Best match" }
+                                                }
+                                                div(classes = "suggestions-list") {
+                                                    div(classes = "suggestion-usd") {
+                                                        img {
+                                                            src = "http://via.placeholder.com/35x35"
+                                                            alt = ""
                                                         }
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "http://via.placeholder.com/70x70"
-                                                                    alt = ""
-                                                                }
-                                                            }
+                                                        div(classes = "sgt-text") {
+                                                            h4 { + "Brabo Hi" }
+                                                            span { + "Bassirou Rabo Hima" }
                                                         }
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "http://via.placeholder.com/70x70"
-                                                                    alt = ""
-                                                                }
-                                                            }
+                                                        span {
+                                                            i(classes = "la la-plus")
                                                         }
                                                     }
                                                 }
@@ -602,25 +444,6 @@ suspend fun ApplicationCall.userPage(user: User) {
                                     alt = ""
                                 }
                             }
-                        }
-                    }
-                }
-
-                div(classes = "overview-box") {
-                    id = "overview-box"
-                    div(classes = "overview-edit") {
-                        h3 {
-                            + "Overview"
-                        }
-                        span { + "5000 character left" }
-                        form {
-                            textArea(classes = "save") { + "Save" }
-                            textArea(classes = "cancel") { + "Cancel" }
-                        }
-                        a(classes = "close-box") {
-                            href = ""
-                            title = ""
-                            i(classes = "la la-close") { }
                         }
                     }
                 }

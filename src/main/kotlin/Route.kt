@@ -181,3 +181,8 @@ fun Routing.userRoute() {
     }
 }
 
+fun Routing.chatRoute() {
+    get<ChatUrl> {chatUrl ->
+        call.chatPage()
+    }
+}
