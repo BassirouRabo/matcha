@@ -109,6 +109,10 @@ suspend fun ApplicationCall.registerPage() {
             }
             link(rel = "stylesheet") {
                 type = "text/css"
+                href = "public/css/flatpickr.min.css"
+            }
+            link(rel = "stylesheet") {
+                type = "text/css"
                 href = "public/css/line-awesome.css"
             }
             link(rel = "stylesheet") {
@@ -136,6 +140,8 @@ suspend fun ApplicationCall.registerPage() {
                 href = "public/css/responsive.css"
             }
         }
+
+
         body(classes = "sign-in") {
             div(classes = "wrapper") {
                 div(classes = "sign-in-page") {
@@ -345,7 +351,6 @@ suspend fun ApplicationCall.registerPage() {
             }
             script(type = "text/javascript") { src = "public/js/jquery.min.js" }
             script(type = "text/javascript") { src = "public/js/popper.js" }
-            script(type = "text/javascript") { src = "public/js/bootstrap.min.js" }
             script(type = "text/javascript") { src = "public/js/bootstrap.min.js" }
             script(type = "text/javascript") { src = "public/js/script.js" }
         }

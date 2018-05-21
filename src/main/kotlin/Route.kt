@@ -163,7 +163,16 @@ fun Routing.userRoute() {
             transaction {
                 user = UserRepository.getByUsername(userUrl.username)
             }
-            if (user == null) call.respondRedirect(application.locations.href(HomeUrl())) else call.userPage(user!!)
+            if (user == null)
+            {
+                println("$$$$$$")
+                call.respondRedirect(application.locations.href(HomeUrl()))
+            }
+            else
+            {
+                println("###")
+                call.userPage(user!!)
+            }
         }
     }
 
