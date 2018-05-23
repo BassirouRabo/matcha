@@ -40,6 +40,7 @@ object UserRepository {
     }
 
     fun add(userData: UserData): User? {
+        println("ADD")
         if (getByUsername(userData.username) != null) return null
         val id = Users.insertAndGetId {
             it[Users.username] = userData.username
@@ -50,6 +51,7 @@ object UserRepository {
             it[Users.password] = userData.password
             it[Users.photo] = userData.photo
             it[Users.gender] = userData.gender
+            it[Users.campus] = userData.campus
             it[Users.biography] = userData.biography
             it[Users.isActivate] = userData.isActivate
             it[Users.code] = userData.code
@@ -67,6 +69,7 @@ object UserRepository {
             user.password = userData.password
             user.photo = userData.photo
             user.gender = userData.gender
+            user.campus = userData.campus
             user.biography = userData.biography
             user.isActivate = userData.isActivate
             user.code = userData.code
@@ -101,6 +104,7 @@ object UserRepository {
                 password = user.password,
                 photo = user.photo,
                 gender = user.gender,
+                campus = user.campus,
                 biography = user.biography,
                 isActivate = user.isActivate,
                 code = user.code

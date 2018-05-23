@@ -25,6 +25,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import pages.*
 import repository.UserRepository
 import Gender.*
+import Campus.*
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -68,7 +69,7 @@ fun Routing.loginRoute() {
                     call.sessions.set(Session(username = user!!.username))
                     call.respondRedirect(application.locations.href(HomeUrl()))
                 }
-                else call.respondRedirect(application.locations.href(ActivateUrl()))
+                else call.respondRedirect(application.locations.href(ActivateUrl(username!!)))
             }
         }
     }
@@ -84,12 +85,11 @@ fun Routing.logoutRoute() {
 }
 
 fun Routing.registerRoute() {
-   location<RegisterUrl> {
-        get{
+        get<RegisterUrl> {
             call.registerPage()
         }
 
-        post {
+        post<RegisterUrl> {
             val params = call.receiveParameters()
 
             val username : String? = params[Users.username.name]
@@ -100,7 +100,7 @@ fun Routing.registerRoute() {
             val password : String? = params[Users.password.name]
             val photo : String? = params[Users.photo.name]
             val gender : String? = params[Users.gender.name]
-            val biographie : String? = params[Users.biography.name]
+            val campus : String? = params[Users.campus.name]
 
             if (username.equals(null)
                     || email.equals(null)
@@ -109,47 +109,51 @@ fun Routing.registerRoute() {
                     || age == 0
                     || password.equals(null)
                     || gender.equals(null)
-                    || biographie.equals(null)) {
+                    || campus.equals(null)) {
                 call.respondRedirect(application.locations.href(RegisterUrl()))
             } else {
                 transaction {
                     logger.addLogger(StdOutSqlLogger)
                     val user: User? = UserRepository.getByUsername(username!!)
-                    if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = biographie!!, photo = photo ?: "photo.jpg", isActivate = false, code = 1234, gender = if(gender.equals("M")) M else F))
+                    println("###")
+                    if (user == null)
+                    {
+                        println("username $username , email $email, firstName $firstName, lastName $lastName, age $age, password $password, ")
+                        UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = "My biography", photo = photo ?: "photo.jpg", isActivate = false, code = 1234, gender = if(gender.equals("Male")) MALE else FEMALE, campus = if(campus.equals("Paris")) PARIS else FREMONT))
+                    }
                 }
                 call.respondRedirect(application.locations.href(LoginUrl()))
             }
         }
-    }
 }
 
 fun Routing.activateRoute() {
-    location<ActivateUrl> {
-        get {
-            call.activatePage()
-        }
 
-        post {
-            var user: User? = null
-            val params = call.receiveParameters()
-            val username = params[Users.username.name]
-            val code = params[Users.code.name]
-            if (username == null || code == null) call.respondRedirect(application.locations.href(ActivateUrl()))
-            else {
+    get<ActivateUrl> { activateUrl ->
+        call.activatePage(activateUrl.username)
+    }
+
+    post<ActivateUrl> { activateUrl ->
+        var user: User? = null
+        val params = call.receiveParameters()
+        val username = call.parameters[Users.username.name]
+        val code = params[Users.code.name]
+        if (username == null)  call.respondRedirect(application.locations.href(LoginUrl()))
+        else if (code == null) call.respondRedirect(application.locations.href(ActivateUrl(username)))
+        else {
+            transaction {
+                user = UserRepository.get(Users.username.eq(username) and Users.code.eq(code.toInt()))
+            }
+            if (user == null) {
+                call.respondRedirect(application.locations.href(ActivateUrl(username)))
+            } else {
                 transaction {
-                    user = UserRepository.get(Users.username.eq(username) and Users.code.eq(code.toInt()))
+                    user!!.isActivate = true
+                    user = UserRepository.update(username, toUserdate(user!!))
                 }
-                if (user == null) {
-                    call.respondRedirect(application.locations.href(ActivateUrl()))
-                } else {
-                    transaction {
-                        user!!.isActivate = true
-                        user = UserRepository.update(username, toUserdate(user!!))
-                    }
-                    if (user == null || !user!!.isActivate) {
-                        call.respondRedirect(application.locations.href(ActivateUrl()))
-                    } else call.respondRedirect(application.locations.href(HomeUrl()))
-                }
+                if (user == null || !user!!.isActivate) {
+                    call.respondRedirect(application.locations.href(ActivateUrl(username)))
+                } else call.respondRedirect(application.locations.href(HomeUrl()))
             }
         }
     }

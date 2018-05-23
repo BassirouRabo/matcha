@@ -23,51 +23,51 @@ suspend fun ApplicationCall.userPage(user: User) {
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/animate.css"
+                href = "/public/css/animate.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/bootstrap.min.css"
+                href = "/public/css/bootstrap.min.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/flatpickr.min.css"
+                href = "/public/css/flatpickr.min.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/jquery.range.css"
+                href = "/public/css/jquery.range.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/line-awesome.css"
+                href = "/public/css/line-awesome.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/line-awesome-font-awesome.min.css"
+                href = "/public/css/line-awesome-font-awesome.min.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/jquery.mCustomScrollbar.min.css"
+                href = "/public/css/jquery.mCustomScrollbar.min.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/font-awesome.min.css"
+                href = "/public/css/font-awesome.min.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/lib/slick/slick.css"
+                href = "/public/lib/slick/slick.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/lib/slick/slick-theme.css"
+                href = "/public/lib/slick/slick-theme.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/style.css"
+                href = "/public/css/style.css"
             }
             link(rel = "stylesheet") {
                 type = "text/css"
-                href = "public/css/responsive.css"
+                href = "/public/css/responsive.css"
             }
         }
 
@@ -81,7 +81,7 @@ suspend fun ApplicationCall.userPage(user: User) {
                             div(classes = "logo") {
                                 a(href = "index.html") {
                                     title = ""
-                                    img(src = "public/images/logo.png") {
+                                    img(src = "/public/images/logo.png") {
                                         alt = ""
                                     }
                                 }
@@ -440,7 +440,7 @@ suspend fun ApplicationCall.userPage(user: User) {
                             p{
                                 + "Copyright 2018"
                                 img {
-                                    src = "public/images/copy-icon2.png"
+                                    src = "/public/images/copy-icon2.png"
                                     alt = ""
                                 }
                             }
@@ -450,15 +450,15 @@ suspend fun ApplicationCall.userPage(user: User) {
 
             }
 
-            script(type = "text/javascript") { src = "public/js/jquery.min.js" }
-            script(type = "text/javascript") { src = "public/js/popper.js" }
-            script(type = "text/javascript") { src = "public/js/bootstrap.min.js" }
-            script(type = "text/javascript") { src = "public/js/jquery.mCustomScrollbar.js" }
-            script(type = "text/javascript") { src = "public/js/jquery.range-min.js" }
-            script(type = "text/javascript") { src = "public/js/flatpickr.min.js" }
-            script(type = "text/javascript") { src = "public/lib/slick/slick.min.js" }
-            script(type = "text/javascript") { src = "public/js/scrollbar.js" }
-            script(type = "text/javascript") { src = "public/js/script.js" }
+            script(type = "text/javascript") { src = "/public/js/jquery.min.js" }
+            script(type = "text/javascript") { src = "/public/js/popper.js" }
+            script(type = "text/javascript") { src = "/public/js/bootstrap.min.js" }
+            script(type = "text/javascript") { src = "/public/js/jquery.mCustomScrollbar.js" }
+            script(type = "text/javascript") { src = "/public/js/jquery.range-min.js" }
+            script(type = "text/javascript") { src = "/public/js/flatpickr.min.js" }
+            script(type = "text/javascript") { src = "/public/lib/slick/slick.min.js" }
+            script(type = "text/javascript") { src = "/public/js/scrollbar.js" }
+            script(type = "text/javascript") { src = "/public/js/script.js" }
         }
     }
 }

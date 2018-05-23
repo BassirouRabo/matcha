@@ -19,6 +19,8 @@ object db {
     }
 }
 
-enum class Gender { M, F }
+enum class Gender { MALE, FEMALE }
 
 enum class Favori { A, B, C, D}
+
+enum class Campus { PARIS, FREMONT }

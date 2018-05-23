@@ -12,7 +12,7 @@ import java.io.File
 @Location("/login") class LoginUrl()
 @Location("/logout") class LogoutUrl()
 @Location("/register") class RegisterUrl()
-@Location("/activate") class ActivateUrl()
+@Location("/{username}/activate") class ActivateUrl(val username : String)
 @Location("/{username}") data class UserUrl(val username : String)
 @Location("/{username}/chats") data class ChatUrl(val username: String)
 

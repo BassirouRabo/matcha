@@ -1,6 +1,7 @@
 package data
 
 import Gender
+import Campus
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -16,6 +17,7 @@ object Users : IntIdTable() {
     val password : Column<String> = varchar("password", 255)
     val photo : Column<String> = varchar("photo", 255)
     val gender = enumeration("gender", Gender::class.java)
+    val campus = enumeration("campus", Campus::class.java)
     val biography : Column<String> =  text("biography")
     val isActivate : Column<Boolean> = bool("is_activate")
     val code : Column<Int> = integer("code")
@@ -32,6 +34,7 @@ class User(id: EntityID<Int>): IntEntity(id) {
     var password by Users.password
     var photo by Users.photo
     var gender by Users.gender
+    var campus by Users.campus
     var biography by Users.biography
     var isActivate by Users.isActivate
     var code by Users.code
@@ -45,6 +48,7 @@ data class UserData(var username: String,
                     var password: String,
                     var photo: String,
                     var gender: Gender,
+                    var campus: Campus,
                     var biography: String = "",
                     var isActivate: Boolean = false,
                     var code: Int)
