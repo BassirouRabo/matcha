@@ -159,7 +159,7 @@ suspend fun ApplicationCall.userPage(user: User) {
                 }
 
                 section(classes = "cover-sec") {
-                    img{
+                    img {
                         src = "http://via.placeholder.com/1600x400"
                         alt = ""
                     }

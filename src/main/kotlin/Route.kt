@@ -30,8 +30,10 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.and
+import repository.LikeRepository
 import repository.UserRepository.toUserdate
 import repository.UserRepository.userToUserdate
+import repository.VisitRepository
 import java.util.logging.Logger
 
 fun Routing.homeRoute() {
@@ -163,28 +165,42 @@ fun Routing.activateRoute() {
 fun Routing.userRoute() {
     get<UserUrl> { userUrl ->
         var user: User? = null
-        val sesion = call.sessions.get<Session>()
-        if (sesion == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        val session = call.sessions.get<Session>()
+        if (session == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
             transaction {
                 user = UserRepository.getByUsername(userUrl.username)
             }
             if (user == null) call.respondRedirect(application.locations.href(HomeUrl()))
-            else if (user!!.username.equals(sesion.username))
+            else if (user!!.username.equals(session.username))
             {
-                var likes  = listOf<User>()
-                var likeds  = listOf<User>()
-                var visits  = listOf<User>()
-                var visiteds  = listOf<User>()
+                val likes: MutableList<User> = mutableListOf<User>()
+                val likeds  : MutableList<User> = mutableListOf<User>()
+                val visits : MutableList<User> = mutableListOf<User>()
+                val visiteds : MutableList<User> = mutableListOf<User>()
                 transaction {
-                    likes = UserRepository.getAll()
-                    likeds = UserRepository.getAll()
-                    visits = UserRepository.getAll()
-                    visiteds = UserRepository.getAll()
+                    VisitRepository.getVisits(session.username).forEach { visit ->
+                        UserRepository.getByUsername(visit.username2)?.let { visits.add(UserRepository.getByUsername(visit.username2)!!) }
+                    }
+                    VisitRepository.getVisiteds(session.username).forEach { visited ->
+                        UserRepository.getByUsername(visited.username1)?.let { visiteds.add(UserRepository.getByUsername(visited.username1)!!) }
+                    }
+                    LikeRepository.getLikes(session.username).forEach { like ->
+                        UserRepository.getByUsername(like.username2)?.let { likes.add(UserRepository.getByUsername(like.username2)!!) }
+                    }
+                    LikeRepository.getLikeds(session.username).forEach { liked ->
+                        UserRepository.getByUsername(liked.username1)?.let { likes.add(UserRepository.getByUsername(liked.username1)!!) }
+                    }
                 }
                 call.profilPage(user!!, likes, likeds, visits, visiteds)
             }
-            else  call.userPage(user!!)
+            else
+            {
+                transaction {
+                    VisitRepository.add(session.username, user!!.username)
+                }
+                call.userPage(user!!)
+            }
         }
     }
 

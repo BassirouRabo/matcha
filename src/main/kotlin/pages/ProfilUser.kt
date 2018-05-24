@@ -250,7 +250,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                     src = "public/images/ic4.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Like 35.000" }
+                                                                span { + "Like ${likes.size}" }
                                                             }
                                                         }
                                                         li(classes = "") {
@@ -262,7 +262,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                     src = "public/images/ic5.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Liked 45.000" }
+                                                                span { + "Liked by ${likeds.size}" }
                                                             }
                                                         }
                                                         li(classes = "") {
@@ -274,7 +274,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                     src = "public/images/ic3.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Visits" }
+                                                                span { + "Visits ${visits.size}" }
                                                             }
                                                         }
                                                         li(classes = "") {
@@ -286,7 +286,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                     src = "public/images/ic6.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Visited" }
+                                                                span { + "Visited by ${visiteds.size}" }
                                                             }
                                                         }
                                                     }

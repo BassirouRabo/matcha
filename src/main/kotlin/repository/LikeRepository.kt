@@ -17,8 +17,12 @@ object LikeRepository {
         return Like.find { op }.toList()
     }
 
-    fun getAll(username: String) : List<Like> {
-        return getAll(Likes.username1.eq(username))
+    fun getLikes(username1: String) : List<Like> {
+        return getAll(Likes.username1.eq(username1))
+    }
+
+    fun getLikeds(username1: String) : List<Like> {
+        return getAll(Likes.username2.eq(username1))
     }
 
     fun get(op: Op<Boolean>): Like? {

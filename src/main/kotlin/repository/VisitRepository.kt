@@ -17,8 +17,12 @@ object VisitRepository {
         return Visit.find { op }.toList()
     }
 
-    fun getAll(username1: String) : List<Visit> {
+    fun getVisits(username1: String) : List<Visit> {
         return getAll(Visits.username1.eq(username1))
+    }
+
+    fun getVisiteds(username1: String) : List<Visit> {
+        return getAll(Visits.username2.eq(username1))
     }
 
     fun get(op: Op<Boolean>) : Visit? {
