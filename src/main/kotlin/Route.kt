@@ -40,7 +40,13 @@ fun Routing.homeRoute() {
             if (call.sessions.get<Session>() == null)
                 call.respondRedirect(application.locations.href(LoginUrl()))
             else
-                call.homePage()
+            {
+                var users: List<User> = listOf()
+                transaction {
+                    users = UserRepository.getAll()
+                }
+                call.homePage(users, users, users)
+            }
         }
     }
 }
@@ -115,12 +121,7 @@ fun Routing.registerRoute() {
                 transaction {
                     logger.addLogger(StdOutSqlLogger)
                     val user: User? = UserRepository.getByUsername(username!!)
-                    println("###")
-                    if (user == null)
-                    {
-                        println("username $username , email $email, firstName $firstName, lastName $lastName, age $age, password $password, ")
-                        UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = "My biography", photo = photo ?: "photo.jpg", isActivate = false, code = 1234, gender = if(gender.equals("Male")) MALE else FEMALE, campus = if(campus.equals("Paris")) PARIS else FREMONT))
-                    }
+                    if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = "My biography", photo = photo ?: "photo.jpg", isActivate = false, code = 1234, gender = if(gender.equals("Male")) MALE else FEMALE, campus = if(campus.equals("Paris")) PARIS else FREMONT))
                 }
                 call.respondRedirect(application.locations.href(LoginUrl()))
             }
@@ -162,21 +163,28 @@ fun Routing.activateRoute() {
 fun Routing.userRoute() {
     get<UserUrl> { userUrl ->
         var user: User? = null
-        if (call.sessions.get<Session>() == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        val sesion = call.sessions.get<Session>()
+        if (sesion == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
             transaction {
                 user = UserRepository.getByUsername(userUrl.username)
             }
-            if (user == null)
+            if (user == null) call.respondRedirect(application.locations.href(HomeUrl()))
+            else if (user!!.username.equals(sesion.username))
             {
-                println("$$$$$$")
-                call.respondRedirect(application.locations.href(HomeUrl()))
+                var likes  = listOf<User>()
+                var likeds  = listOf<User>()
+                var visits  = listOf<User>()
+                var visiteds  = listOf<User>()
+                transaction {
+                    likes = UserRepository.getAll()
+                    likeds = UserRepository.getAll()
+                    visits = UserRepository.getAll()
+                    visiteds = UserRepository.getAll()
+                }
+                call.profilPage(user!!, likes, likeds, visits, visiteds)
             }
-            else
-            {
-                println("###")
-                call.userPage(user!!)
-            }
+            else  call.userPage(user!!)
         }
     }
 

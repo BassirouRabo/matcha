@@ -163,16 +163,9 @@ suspend fun ApplicationCall.userPage(user: User) {
                         src = "http://via.placeholder.com/1600x400"
                         alt = ""
                     }
-                    a {
-                        href = "#"
-                        title = ""
-                        + "Change Image"
-                        i(classes = "fa fa-camera") {}
-                    }
                 }
 
-                //TODO change to main
-                div {
+                section {
                     div(classes = "main-section") {
                         div(classes = "container") {
                             div(classes = "main-section-data") {
@@ -200,28 +193,24 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                 }
                                                 ul(classes = "social_links") {
                                                     li{
-                                                        a() {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-facebook-square") {}
-                                                            + "@brabo-hi"
-                                                        }
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${user.username}"
                                                     }
                                                     li{
-                                                        a() {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-twitter") {}
-                                                            + "@brabo-hi"
-                                                        }
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${user.firstName}"
                                                     }
                                                     li{
-                                                        a() {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-instagram") {}
-                                                            + "@brabo-hi"
-                                                        }
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${user.lastName}"
+                                                    }
+                                                    li{
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${getGender(user.gender)}"
+                                                    }
+                                                    li{
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${getCampus(user.campus)}"
                                                     }
                                                 }
                                             }
@@ -266,32 +255,8 @@ suspend fun ApplicationCall.userPage(user: User) {
                                             div(classes = "product-feed-tab current") {
                                                 id = "info-dd"
                                                 div(classes = "user-profile-ov") {
-                                                    h3 { + "Overview" }
-                                                    p { + "Zappy is an entirely automatic game where some computer programs play amongst them-selves." }
-                                                }
-                                                div(classes = "user-profile-ov") {
-                                                    h3 { + "Location" }
-                                                    h4 { + "Fremont" }
-                                                    p { + "6600 Dumbarton circle" }
-                                                }
-                                                div(classes = "user-profile-ov") {
-                                                    h3 { + "Skills" }
-                                                    ul {
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                + "HTML"
-                                                            }
-                                                        }
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                + "PHP"
-                                                            }
-                                                        }
-                                                    }
+                                                    h3 { + "About me" }
+                                                    p { + user.biography }
                                                 }
                                             }
                                             div(classes = "product-feed-tab") {

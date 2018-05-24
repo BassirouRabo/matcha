@@ -176,7 +176,7 @@ suspend fun ApplicationCall.registerPage() {
                                                     div(classes = "col-lg-12 no-pdd") {
                                                         div(classes = "sn-field") {
                                                             passwordInput(classes = "") {
-                                                                name = "password"
+                                                                name = Users.password.name
                                                                 placeholder = "Password"
                                                             }
                                                             i(classes = "la la-lock") {}

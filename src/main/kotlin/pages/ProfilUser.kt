@@ -6,10 +6,14 @@ import io.ktor.request.uri
 import io.ktor.response.respondText
 import UserUrl
 import data.User
+import data.Users
+import getCampus
+import getGender
 import io.ktor.html.respondHtml
+import io.ktor.locations.locations
 import kotlinx.html.*
 
-suspend fun ApplicationCall.profilPage(user: User) {
+suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: List<User>, visits: List<User>, visiteds: List<User>) {
     respondHtml {
         head {
             meta(charset = "UTF-8")
@@ -173,8 +177,7 @@ suspend fun ApplicationCall.profilPage(user: User) {
                     }
                 }
 
-                //TODO change to main
-                div {
+                section {
                     div(classes = "main-section") {
                         div(classes = "container") {
                             div(classes = "main-section-data") {
@@ -183,35 +186,35 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                         div(classes = "main-left-sidebar") {
                                             div(classes = "user_profile") {
                                                 div(classes = "user-pro-img") {
-                                                    img() {
+                                                    img {
                                                         src = "http://via.placeholder.com/170x170"
                                                         alt = ""
+                                                    }
+                                                    a {
+                                                        href = "#"
+                                                        i(classes = "fa fa-camera") {}
                                                     }
                                                 }
                                                 ul(classes = "social_links") {
                                                     li{
-                                                        a() {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-facebook-square") {}
-                                                            + "@brabo-hi"
-                                                        }
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${user.username}"
                                                     }
                                                     li{
-                                                        a() {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-twitter") {}
-                                                            + "@brabo-hi"
-                                                        }
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${user.firstName}"
                                                     }
                                                     li{
-                                                        a() {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-instagram") {}
-                                                            + "@brabo-hi"
-                                                        }
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${user.lastName}"
+                                                    }
+                                                    li{
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${getGender(user.gender)}"
+                                                    }
+                                                    li{
+                                                        i(classes = "fa fa-instagram") {}
+                                                        + " ${getCampus(user.campus)}"
                                                     }
                                                 }
                                             }
@@ -239,7 +242,7 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                             }
                                                         }
                                                         li(classes = "") {
-                                                            attributes["data-tab"] = "saved-jobs"
+                                                            attributes["data-tab"] = "like"
                                                             a {
                                                                 href = "#"
                                                                 title = ""
@@ -251,7 +254,7 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                             }
                                                         }
                                                         li(classes = "") {
-                                                            attributes["data-tab"] = "my-bids"
+                                                            attributes["data-tab"] = "liked"
                                                             a {
                                                                 href = "#"
                                                                 title = ""
@@ -263,7 +266,7 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                             }
                                                         }
                                                         li(classes = "") {
-                                                            attributes["data-tab"] = "portfolio-dd"
+                                                            attributes["data-tab"] = "visit"
                                                             a {
                                                                 href = "#"
                                                                 title = ""
@@ -275,7 +278,7 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                             }
                                                         }
                                                         li(classes = "") {
-                                                            attributes["data-tab"] = "payment-dd"
+                                                            attributes["data-tab"] = "visited"
                                                             a {
                                                                 href = "#"
                                                                 title = ""
@@ -296,7 +299,7 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                         a(classes = "overview-open") {
                                                             href = "#"
                                                             title = ""
-                                                            + "Overview"
+                                                            + "About me"
                                                         }
                                                         a(classes = "overview-open") {
                                                             href = "#"
@@ -304,96 +307,60 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                             i(classes = "fa fa-pencil") { }
                                                         }
                                                     }
-                                                    p { + "Zappy is an entirely automatic game where some computer programs play amongst them-selves. The game speed is defined by a time unit. Each action in the game has a durationproportionate to this time unit." }
-                                                }
-                                                div(classes = "user-profile-ov") {
-                                                    h3 {
-                                                        a(classes = "lct-box-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            + "Location"
-                                                        }
-                                                        a(classes = "lct-box-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i(classes = "fa fa-pencil") { }
-                                                        }
-                                                        a(classes = "") {
-                                                            href = "#"
-                                                            i(classes = "fa fa-plus-square") { }
-                                                        }
-                                                    }
-                                                    h4 { + "Fremont" }
-                                                    p { + "16600 Dumbarton Circle " }
-                                                }
-                                                div(classes = "user-profile-ov") {
-                                                    h3 {
-                                                        a(classes = "skills-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            + "Skills"
-                                                        }
-                                                        a(classes = "skills-open") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i (classes = "fa fa-pencil") { }
-                                                        }
-                                                        a(classes = "") {
-                                                            href = "#"
-                                                            title = ""
-                                                            i (classes = "fa fa-plus-square") { }
-                                                        }
-                                                    }
-                                                    ul {
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                + "HTML"
-                                                            }
-                                                        }
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                + "PHP"
-                                                            }
-                                                        }
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                + "CSS"
-                                                            }
-                                                        }
-                                                    }
+                                                    p { + user.biography }
                                                 }
                                             }
                                             div(classes = "product-feed-tab") {
-                                                id = "saved-jobs"
+                                                id = "like"
                                                 div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
-                                                                        img {
-                                                                            src = "images/clock.png"
-                                                                            alt = ""
+                                                    likes.forEach { user ->
+                                                        div(classes = "post-bar") {
+                                                            div(classes = "post_topbar") {
+                                                               a {
+                                                                   href = locations.href(UserUrl(user.username))
+                                                                   title = "Profil : ${user.username}"
+                                                                   div(classes = "usy-dt") {
+                                                                       img {
+                                                                           src = "http://via.placeholder.com/50x50"
+                                                                           alt = ""
+                                                                       }
+                                                                       div(classes = "usy-name") {
+                                                                           h3 { + " ${user.username}" }
+                                                                           span {
+                                                                               img {
+                                                                                   src = "images/clock.png"
+                                                                                   alt = ""
+                                                                               }
+                                                                               + " ${user.firstName}"
+                                                                           }
+                                                                       }
+                                                                   }
+                                                               }
+                                                                div(classes = "ed-opts") {
+                                                                    ul(classes = "bk-links") {
+                                                                        li {
+                                                                            a {
+                                                                                href = "#"
+                                                                                i(classes = "la la-envelope") {}
+                                                                            }
                                                                         }
-                                                                        + "3 min ago"
+                                                                        li{
+                                                                            a(classes = "ed-opts-open") {
+                                                                                href = "#"
+                                                                                title = ""
+                                                                                i(classes = "la la-ellipsis-v") {}
+                                                                            }
+                                                                            ul(classes = "ed-options") {
+                                                                                li {
+                                                                                    a {
+                                                                                        href = "#"
+                                                                                        title = ""
+                                                                                        + "Block"
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     }
-                                                                }
-                                                            }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
                                                                 }
                                                             }
                                                         }
@@ -401,30 +368,56 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                 }
                                             }
                                             div(classes = "product-feed-tab") {
-                                                id = "my-bids"
+                                                id = "liked"
                                                 div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
+                                                    likeds.forEach { user ->
+                                                        div(classes = "post-bar") {
+                                                            div(classes = "post_topbar") {
+                                                                a {
+                                                                    href = locations.href(UserUrl(user.username))
+                                                                    title = "Profil : ${user.username}"
+                                                                    div(classes = "usy-dt") {
                                                                         img {
-                                                                            src = "images/clock.png"
+                                                                            src = "http://via.placeholder.com/50x50"
                                                                             alt = ""
                                                                         }
-                                                                        + "3 min ago"
+                                                                        div(classes = "usy-name") {
+                                                                            h3 { + " ${user.username}" }
+                                                                            span {
+                                                                                img {
+                                                                                    src = "images/clock.png"
+                                                                                    alt = ""
+                                                                                }
+                                                                                + " ${user.firstName}"
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
+                                                                div(classes = "ed-opts") {
+                                                                    ul(classes = "bk-links") {
+                                                                        li {
+                                                                            a {
+                                                                                href = "#"
+                                                                                i(classes = "la la-envelope") {}
+                                                                            }
+                                                                        }
+                                                                        li{
+                                                                            a(classes = "ed-opts-open") {
+                                                                                href = "#"
+                                                                                title = ""
+                                                                                i(classes = "la la-ellipsis-v") {}
+                                                                            }
+                                                                            ul(classes = "ed-options") {
+                                                                                li {
+                                                                                    a {
+                                                                                        href = "#"
+                                                                                        title = ""
+                                                                                        + "Block"
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -432,30 +425,56 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                 }
                                             }
                                             div(classes = "product-feed-tab") {
-                                                id = "portfolio-dd"
+                                                id = "visit"
                                                 div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
+                                                    visits.forEach { user ->
+                                                        div(classes = "post-bar") {
+                                                            div(classes = "post_topbar") {
+                                                                a {
+                                                                    href = locations.href(UserUrl(user.username))
+                                                                    title = "Profil : ${user.username}"
+                                                                    div(classes = "usy-dt") {
                                                                         img {
-                                                                            src = "images/clock.png"
+                                                                            src = "http://via.placeholder.com/50x50"
                                                                             alt = ""
                                                                         }
-                                                                        + "3 min ago"
+                                                                        div(classes = "usy-name") {
+                                                                            h3 { + " ${user.username}" }
+                                                                            span {
+                                                                                img {
+                                                                                    src = "images/clock.png"
+                                                                                    alt = ""
+                                                                                }
+                                                                                + " ${user.firstName}"
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
+                                                                div(classes = "ed-opts") {
+                                                                    ul(classes = "bk-links") {
+                                                                        li {
+                                                                            a {
+                                                                                href = "#"
+                                                                                i(classes = "la la-envelope") {}
+                                                                            }
+                                                                        }
+                                                                        li{
+                                                                            a(classes = "ed-opts-open") {
+                                                                                href = "#"
+                                                                                title = ""
+                                                                                i(classes = "la la-ellipsis-v") {}
+                                                                            }
+                                                                            ul(classes = "ed-options") {
+                                                                                li {
+                                                                                    a {
+                                                                                        href = "#"
+                                                                                        title = ""
+                                                                                        + "Block"
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -463,30 +482,56 @@ suspend fun ApplicationCall.profilPage(user: User) {
                                                 }
                                             }
                                             div(classes = "product-feed-tab") {
-                                                id = "payment-dd"
+                                                id = "visited"
                                                 div(classes = "posts-section") {
-                                                    div(classes = "post-bar") {
-                                                        div(classes = "post_topbar") {
-                                                            div(classes = "usy-dt") {
-                                                                img {
-                                                                    src = "http://via.placeholder.com/50x50"
-                                                                    alt = ""
-                                                                }
-                                                                div(classes = "usy-name") {
-                                                                    h3 { + "Brabo Hi" }
-                                                                    span {
+                                                    visiteds.forEach { user ->
+                                                        div(classes = "post-bar") {
+                                                            div(classes = "post_topbar") {
+                                                                a {
+                                                                    href = locations.href(UserUrl(user.username))
+                                                                    title = "Profil : ${user.username}"
+                                                                    div(classes = "usy-dt") {
                                                                         img {
-                                                                            src = "images/clock.png"
+                                                                            src = "http://via.placeholder.com/50x50"
                                                                             alt = ""
                                                                         }
-                                                                        + "3 min ago"
+                                                                        div(classes = "usy-name") {
+                                                                            h3 { + " ${user.username}" }
+                                                                            span {
+                                                                                img {
+                                                                                    src = "images/clock.png"
+                                                                                    alt = ""
+                                                                                }
+                                                                                + " ${user.firstName}"
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                            div(classes = "ed-opts") {
-                                                                a(classes = "ed-opts-open") {
-                                                                    href = "#"
-                                                                    i(classes = "la la-envelope")
+                                                                div(classes = "ed-opts") {
+                                                                    ul(classes = "bk-links") {
+                                                                        li {
+                                                                            a {
+                                                                                href = "#"
+                                                                                i(classes = "la la-envelope") {}
+                                                                            }
+                                                                        }
+                                                                        li{
+                                                                            a(classes = "ed-opts-open") {
+                                                                                href = "#"
+                                                                                title = ""
+                                                                                i(classes = "la la-ellipsis-v") {}
+                                                                            }
+                                                                            ul(classes = "ed-options") {
+                                                                                li {
+                                                                                    a {
+                                                                                        href = "#"
+                                                                                        title = ""
+                                                                                        + "Block"
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -609,17 +654,80 @@ suspend fun ApplicationCall.profilPage(user: User) {
                 div(classes = "overview-box") {
                     id = "overview-box"
                     div(classes = "overview-edit") {
-                        h3 {
-                            + "Overview"
-                        }
+                        h3 { + "Overview" }
                         span { + "5000 character left" }
                         form {
-                            textArea(classes = "save") { + "Save" }
-                            textArea(classes = "cancel") { + "Cancel" }
+                            textInput {
+                                name = Users.username.name
+                                value = user.username
+                                readonly = true
+                                required = true
+                            }
+                            textInput {
+                                name = Users.firstName.name
+                                value = user.firstName
+                                required = true
+                            }
+                            textInput {
+                                name = Users.lastName.name
+                                value = user.lastName
+                                required = true
+                            }
+                            emailInput {
+                                name = Users.email.name
+                                value = user.email
+                                required = true
+                            }
+                            numberInput {
+                                name = Users.age.name
+                                value = user.age.toString()
+                                min = "18"
+                                max = "100"
+                                required = true
+                            }
+                            select {
+                                name = Users.campus.name
+                                required = true
+                                option {
+                                    value = Campus.PARIS.toString()
+                                    +"Paris"
+                                }
+                                option {
+                                    value = Campus.FREMONT.toString()
+                                    +"Fremont"
+                                }
+                            }
+                            select {
+                                name = Users.gender.name
+                                required = true
+                                option {
+                                    value = Gender.MALE.toString()
+                                    +"Male"
+                                }
+                                option {
+                                    value = Gender.FEMALE.toString()
+                                    +"Female"
+                                }
+                            }
+                            textArea {
+                                name = Users.biography.name
+                                maxLength = "500"
+                                required = true
+                                + user.biography
+                            }
+                            passwordInput {
+                                name = Users.password.name
+                                placeholder = "Password"
+                                required = true
+                            }
+                            button(classes = "save") {
+                                type = ButtonType.submit
+                                + "Save"
+                            }
                         }
                         a(classes = "close-box") {
-                            href = ""
-                            title = ""
+                            href = "#"
+                            title = "close"
                             i(classes = "la la-close") { }
                         }
                     }
