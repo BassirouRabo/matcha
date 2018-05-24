@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
-val SESSION : String = "SESSION"
+val SESSION: String = "SESSION"
 
 object db {
     fun connect() {
@@ -21,6 +21,8 @@ object db {
 
 enum class Gender { MALE, FEMALE }
 
-enum class Favori { A, B, C, D}
+enum class Favori { A, B, C, D }
 
 enum class Campus { PARIS, FREMONT }
+
+enum class Matching { A0B, A1B, B1A, A2B }

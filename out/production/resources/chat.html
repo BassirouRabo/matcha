@@ -1,348 +1,351 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>42 Date | Chat</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="" />
-<meta name="keywords" content="" />
-<link rel="stylesheet" type="text/css" href="css/animate.css">
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="css/line-awesome.css">
-<link rel="stylesheet" type="text/css" href="css/line-awesome-font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css">
-<link rel="stylesheet" type="text/css" href="lib/slick/slick.css">
-<link rel="stylesheet" type="text/css" href="lib/slick/slick-theme.css">
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <meta charset="UTF-8">
+    <title>42 Date | Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/line-awesome.css">
+    <link rel="stylesheet" type="text/css" href="css/line-awesome-font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="lib/slick/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
 </head>
 
 <body>
 
-	<div class="wrapper">
+<div class="wrapper">
 
-		<header>
-			<div class="container">
-				<div class="header-data">
-					<div class="logo">
-						<a href="index.html" title=""><img src="images/logo.png" alt=""></a>
-					</div><!--logo end-->
-					<div class="menu-btn">
-						<a href="#" title=""><i class="fa fa-bars"></i></a>
-					</div><!--menu-btn end-->
-					<div class="user-account">
-						<div class="user-info">
-							<img src="http://via.placeholder.com/30x30" alt="">
-							<a href="#" title="">Brabo</a>
-							<i class="la la-sort-down"></i>
-						</div>
-						<div class="user-account-settingss">
-							<h3>Online Status</h3>
-							<ul class="on-off-status">
-								<li>
-									<div class="fgt-sec">
-										<input type="radio" name="cc" id="c5">
-										<label for="c5">
-											<span></span>
-										</label>
-										<small>Online</small>
-									</div>
-								</li>
-								<li>
-									<div class="fgt-sec">
-										<input type="radio" name="cc" id="c6">
-										<label for="c6">
-											<span></span>
-										</label>
-										<small>Offline</small>
-									</div>
-								</li>
-							</ul>
-							<h3>Setting</h3>
-							<ul class="us-links">
-								<li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-								<li><a href="#" title="">Privacy</a></li>
-								<li><a href="#" title="">Faqs</a></li>
-								<li><a href="#" title="">Terms & Conditions</a></li>
-							</ul>
-							<h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
-						</div><!--user-account-settingss end-->
-					</div>
-				</div><!--header-data end-->
-			</div>
-		</header>
+    <header>
+        <div class="container">
+            <div class="header-data">
+                <div class="logo">
+                    <a href="index.html" title=""><img src="images/logo.png" alt=""></a>
+                </div><!--logo end-->
+                <div class="menu-btn">
+                    <a href="#" title=""><i class="fa fa-bars"></i></a>
+                </div><!--menu-btn end-->
+                <div class="user-account">
+                    <div class="user-info">
+                        <img src="http://via.placeholder.com/30x30" alt="">
+                        <a href="#" title="">Brabo</a>
+                        <i class="la la-sort-down"></i>
+                    </div>
+                    <div class="user-account-settingss">
+                        <h3>Online Status</h3>
+                        <ul class="on-off-status">
+                            <li>
+                                <div class="fgt-sec">
+                                    <input type="radio" name="cc" id="c5">
+                                    <label for="c5">
+                                        <span></span>
+                                    </label>
+                                    <small>Online</small>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fgt-sec">
+                                    <input type="radio" name="cc" id="c6">
+                                    <label for="c6">
+                                        <span></span>
+                                    </label>
+                                    <small>Offline</small>
+                                </div>
+                            </li>
+                        </ul>
+                        <h3>Setting</h3>
+                        <ul class="us-links">
+                            <li><a href="profile-account-setting.html" title="">Account Setting</a></li>
+                            <li><a href="#" title="">Privacy</a></li>
+                            <li><a href="#" title="">Faqs</a></li>
+                            <li><a href="#" title="">Terms & Conditions</a></li>
+                        </ul>
+                        <h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
+                    </div><!--user-account-settingss end-->
+                </div>
+            </div><!--header-data end-->
+        </div>
+    </header>
 
-		<section class="messages-page">
-			<div class="container">
-				<div class="messages-sec">
-					<div class="row">
-						<div class="col-lg-4 col-md-12 no-pdd">
-							<div class="msgs-list">
-								<div class="msg-title">
-									<h3>Messages</h3>
-									<ul>
-										<li><a href="#" title=""><i class="fa fa-cog"></i></a></li>
-										<li><a href="#" title=""><i class="fa fa-ellipsis-v"></i></a></li>
-									</ul>
-								</div>
-								<div class="messages-list">
-									<ul>
-										<li class="active">
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici... </p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-												<span class="msg-notifc">1</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici....</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici....</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="http://via.placeholder.com/50x50" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Brabo-hi</h3>
-													<p>Un long message ici...</p>
-												</div>
-												<span class="posted_time">1:55 PM</span>
-											</div>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
-							<div class="main-conversation-box">
-								<div class="message-bar-head">
-									<div class="usr-msg-details">
-										<div class="usr-ms-img">
-											<img src="http://via.placeholder.com/50x50" alt="">
-										</div>
-										<div class="usr-mg-info">
-											<h3>Brabo Hi</h3>
-											<p>Online</p>
-										</div>
-									</div>
-									<a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
-								</div>
-								<div class="messages-line">
-                                    <div class="main-message-box ta-right">
-                                        <div class="message-dt">
-                                            <div class="message-inner-dt">
-                                                <p>Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit. Each action in the game has a duration proportionate to this time unit.</p>
+    <section class="messages-page">
+        <div class="container">
+            <div class="messages-sec">
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 no-pdd">
+                        <div class="msgs-list">
+                            <div class="msg-title">
+                                <h3>Messages</h3>
+                                <ul>
+                                    <li><a href="#" title=""><i class="fa fa-cog"></i></a></li>
+                                    <li><a href="#" title=""><i class="fa fa-ellipsis-v"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="messages-list">
+                                <ul>
+                                    <li class="active">
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                                <span class="msg-status"></span>
                                             </div>
-                                            <span>Sat, Aug 23, 1:08 PM</span>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici... </p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                            <span class="msg-notifc">1</span>
                                         </div>
-                                        <div class="messg-usr-img">
-                                            <img src="http://via.placeholder.com/50x50" alt="">
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
                                         </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                                <span class="msg-status"></span>
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                                <span class="msg-status"></span>
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici....</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                                <span class="msg-status"></span>
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                                <span class="msg-status"></span>
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici....</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="usr-msg-details">
+                                            <div class="usr-ms-img">
+                                                <img src="http://via.placeholder.com/50x50" alt="">
+                                            </div>
+                                            <div class="usr-mg-info">
+                                                <h3>Brabo-hi</h3>
+                                                <p>Un long message ici...</p>
+                                            </div>
+                                            <span class="posted_time">1:55 PM</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
+                        <div class="main-conversation-box">
+                            <div class="message-bar-head">
+                                <div class="usr-msg-details">
+                                    <div class="usr-ms-img">
+                                        <img src="http://via.placeholder.com/50x50" alt="">
                                     </div>
-									<div class="main-message-box st3">
-										<div class="message-dt st3">
-											<div class="message-inner-dt">
-												<p>Un long messge ici </p>
-											</div>
-											<span>2 minutes ago</span>
-										</div>
-										<div class="messg-usr-img">
-											<img src="http://via.placeholder.com/50x50" alt="">
-										</div>
-									</div>
-									<div class="main-message-box ta-right">
-										<div class="message-dt">
-											<div class="message-inner-dt">
-												<p>Zappy is an entirely automatic game where some computer programs play amongst them-
-                                                    selves. The game speed is defined by a time unit. Each action in the game has a duration
-                                                    proportionate to this time unit.</p>
-											</div>
-											<span>Sat, Aug 23, 1:08 PM</span>
-										</div>
-										<div class="messg-usr-img">
-											<img src="http://via.placeholder.com/50x50" alt="">
-										</div>
-									</div>
-									<div class="main-message-box st3">
-										<div class="message-dt st3">
-											<div class="message-inner-dt">
-												<p>....</p>
-											</div>
-											<span>Typing...</span>
-										</div>
-										<div class="messg-usr-img">
-											<img src="http://via.placeholder.com/50x50" alt="">
-										</div>
-									</div>
-								</div>
-								<div class="message-send-area">
-									<form>
-										<div class="mf-field">
-											<input type="text" name="message" placeholder="Type a message here">
-											<button type="submit">Send</button>
-										</div>
-										<ul>
-											<li><a href="#" title=""><i class="fa fa-smile-o"></i></a></li>
-											<li><a href="#" title=""><i class="fa fa-camera"></i></a></li>
-											<li><a href="#" title=""><i class="fa fa-paperclip"></i></a></li>
-										</ul>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+                                    <div class="usr-mg-info">
+                                        <h3>Brabo Hi</h3>
+                                        <p>Online</p>
+                                    </div>
+                                </div>
+                                <a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
+                            </div>
+                            <div class="messages-line">
+                                <div class="main-message-box ta-right">
+                                    <div class="message-dt">
+                                        <div class="message-inner-dt">
+                                            <p>Zappy is an entirely automatic game where some computer programs play
+                                                amongst them- selves. The game speed is defined by a time unit. Each
+                                                action in the game has a duration proportionate to this time unit.</p>
+                                        </div>
+                                        <span>Sat, Aug 23, 1:08 PM</span>
+                                    </div>
+                                    <div class="messg-usr-img">
+                                        <img src="http://via.placeholder.com/50x50" alt="">
+                                    </div>
+                                </div>
+                                <div class="main-message-box st3">
+                                    <div class="message-dt st3">
+                                        <div class="message-inner-dt">
+                                            <p>Un long messge ici </p>
+                                        </div>
+                                        <span>2 minutes ago</span>
+                                    </div>
+                                    <div class="messg-usr-img">
+                                        <img src="http://via.placeholder.com/50x50" alt="">
+                                    </div>
+                                </div>
+                                <div class="main-message-box ta-right">
+                                    <div class="message-dt">
+                                        <div class="message-inner-dt">
+                                            <p>Zappy is an entirely automatic game where some computer programs play
+                                                amongst them-
+                                                selves. The game speed is defined by a time unit. Each action in the
+                                                game has a duration
+                                                proportionate to this time unit.</p>
+                                        </div>
+                                        <span>Sat, Aug 23, 1:08 PM</span>
+                                    </div>
+                                    <div class="messg-usr-img">
+                                        <img src="http://via.placeholder.com/50x50" alt="">
+                                    </div>
+                                </div>
+                                <div class="main-message-box st3">
+                                    <div class="message-dt st3">
+                                        <div class="message-inner-dt">
+                                            <p>....</p>
+                                        </div>
+                                        <span>Typing...</span>
+                                    </div>
+                                    <div class="messg-usr-img">
+                                        <img src="http://via.placeholder.com/50x50" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="message-send-area">
+                                <form>
+                                    <div class="mf-field">
+                                        <input type="text" name="message" placeholder="Type a message here">
+                                        <button type="submit">Send</button>
+                                    </div>
+                                    <ul>
+                                        <li><a href="#" title=""><i class="fa fa-smile-o"></i></a></li>
+                                        <li><a href="#" title=""><i class="fa fa-camera"></i></a></li>
+                                        <li><a href="#" title=""><i class="fa fa-paperclip"></i></a></li>
+                                    </ul>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-		<footer>
-			<div class="footy-sec mn no-margin">
-				<div class="container">
-					<ul>
-						<li><a href="#" title="">Intra</a></li>
-						<li><a href="#" title="">School</a></li>
-						<li><a href="#" title="">Privacy Policy</a></li>
-						<li><a href="#" title="">Campus</a></li>
-						<li><a href="#" title="">Cookies Policy</a></li>
-						<li><a href="#" title="">Shop</a></li>
-						<li><a href="#" title="">Developed by @brabo-hi</a></li>
-					</ul>
-					<p><img src="images/copy-icon2.png" alt="">Copyright 2018</p>
-				</div>
-			</div>
-		</footer>
+    <footer>
+        <div class="footy-sec mn no-margin">
+            <div class="container">
+                <ul>
+                    <li><a href="#" title="">Intra</a></li>
+                    <li><a href="#" title="">School</a></li>
+                    <li><a href="#" title="">Privacy Policy</a></li>
+                    <li><a href="#" title="">Campus</a></li>
+                    <li><a href="#" title="">Cookies Policy</a></li>
+                    <li><a href="#" title="">Shop</a></li>
+                    <li><a href="#" title="">Developed by @brabo-hi</a></li>
+                </ul>
+                <p><img src="images/copy-icon2.png" alt="">Copyright 2018</p>
+            </div>
+        </div>
+    </footer>
 
-	</div>
+</div>
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/popper.js"></script>

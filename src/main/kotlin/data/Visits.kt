@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.Column
 import org.joda.time.DateTime
 
 object Visits : IntIdTable() {
-    val username1 : Column<String> = reference("visit_username1", Users.username)
-    val username2 : Column<String> = reference("visit_username2", Users.username)
-    val date : Column<DateTime> = datetime("date")
+    val username1: Column<String> = reference("visit_username1", Users.username)
+    val username2: Column<String> = reference("visit_username2", Users.username)
+    val date: Column<DateTime> = datetime("date")
 }
 
-class Visit(id: EntityID<Int>): IntEntity(id) {
+class Visit(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Visit>(Visits)
 
     var username1 by Visits.username1

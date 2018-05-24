@@ -1,14 +1,21 @@
 package pages
 
+import Session
+import UserUrl
 import io.ktor.application.ApplicationCall
 import io.ktor.html.respondHtml
+import io.ktor.locations.locations
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import kotlinx.html.*
 
 suspend fun ApplicationCall.chatPage() {
+    val username = sessions.get<Session>()!!.username
+
     respondHtml {
         head {
             meta(charset = "UTF-8")
-            title{ + "42 Date | Home" }
+            title { +"42 Date | Home" }
             meta(name = "viewport") {
                 content = "width=device-width, initial-scale=1.0"
             }
@@ -75,7 +82,8 @@ suspend fun ApplicationCall.chatPage() {
                     div(classes = "container") {
                         div(classes = "header-data") {
                             div(classes = "logo") {
-                                a(href = "index.html") {
+                                a {
+                                    href = "/"
                                     title = ""
                                     img(src = "/public/images/logo.png") {
                                         alt = ""
@@ -84,69 +92,11 @@ suspend fun ApplicationCall.chatPage() {
                             }
                             div(classes = "user-account") {
                                 div(classes = "user-info") {
-                                    img(src = "http://via.placeholder.com/30x30") {
-                                        alt = ""
-                                    }
-                                    a(href = "#") {
-                                        title = ""
-                                        + "Brabo"
-                                    }
-                                    i(classes = "la la-sort-down") {}
-                                }
-                                div(classes = "user-account-settingss") {
-                                    h3{ + "Online Status" }
-                                    ul(classes = "on-off-status") {
-                                        li{
-                                            div(classes = "fgt-sec") {
-                                                radioInput(name = "cc") {
-                                                    id = "c5"
-                                                }
-                                                label() {
-                                                    htmlFor = "c5"
-                                                    span {  }
-                                                }
-                                                small { + "Online" }
-                                            }
-                                        }
-                                        li {
-                                            div(classes = "fgt-sec") {
-                                                radioInput(name = "cc") {
-                                                    id = "c6"
-                                                }
-                                                label {
-                                                    htmlFor = "c6"
-                                                    span {  }
-                                                }
-                                                small { + "Offline" }
-                                            }
-                                        }
-                                    }
-                                    h3 { + "Setting" }
-                                    ul(classes = "us-links") {
-                                        li{
-                                            a(href = "#") {
-                                                title = ""
-                                                + "Account Setting"
-                                            }
-                                            a(href = "#") {
-                                                title = ""
-                                                + "Privacy"
-                                            }
-                                            a(href = "#") {
-                                                title = ""
-                                                + "Faqs"
-                                            }
-                                            a(href = "#") {
-                                                title = ""
-                                                + "Terms & Conditions"
-                                            }
-                                        }
-                                    }
-                                    h3(classes = "tc") {
-                                        a(href = "#") {
-                                            title = ""
-                                            + "Logout"
-                                        }
+                                    a {
+                                        href = locations.href(UserUrl(username))
+                                        title = username
+                                        i(classes = "la la-tasks") {}
+                                        +username.toUpperCase()
                                     }
                                 }
                             }
@@ -161,7 +111,7 @@ suspend fun ApplicationCall.chatPage() {
                                 div(classes = "col-lg-4 col-md-12 no-pdd") {
                                     div(classes = "msgs-list") {
                                         div(classes = "msg-title") {
-                                            h3 { + "Messages" }
+                                            h3 { +"Messages" }
                                             ul {
                                                 li {
                                                     a {
@@ -191,11 +141,11 @@ suspend fun ApplicationCall.chatPage() {
                                                             span(classes = "msg-status")
                                                         }
                                                         div(classes = "usr-mg-info") {
-                                                            h3 { + "Brabo-hi" }
-                                                            p { + "Un long message ici..." }
+                                                            h3 { +"Brabo-hi" }
+                                                            p { +"Un long message ici..." }
                                                         }
-                                                        span(classes = "posted_time") { + "1:55 PM" }
-                                                        span(classes = "msg-notifc") { + "1" }
+                                                        span(classes = "posted_time") { +"1:55 PM" }
+                                                        span(classes = "msg-notifc") { +"1" }
                                                     }
                                                 }
                                                 li(classes = "") {
@@ -208,11 +158,11 @@ suspend fun ApplicationCall.chatPage() {
                                                             span(classes = "msg-status")
                                                         }
                                                         div(classes = "usr-mg-info") {
-                                                            h3 { + "Brabo-hi" }
-                                                            p { + "Un long message ici..." }
+                                                            h3 { +"Brabo-hi" }
+                                                            p { +"Un long message ici..." }
                                                         }
-                                                        span(classes = "posted_time") { + "1:55 PM" }
-                                                        span(classes = "msg-notifc") { + "1" }
+                                                        span(classes = "posted_time") { +"1:55 PM" }
+                                                        span(classes = "msg-notifc") { +"1" }
                                                     }
                                                 }
                                             }
@@ -230,8 +180,8 @@ suspend fun ApplicationCall.chatPage() {
                                                     }
                                                 }
                                                 div(classes = "usr-mg-info") {
-                                                    h3 { + "Brabo Hi" }
-                                                    p { + "Online" }
+                                                    h3 { +"Brabo Hi" }
+                                                    p { +"Online" }
                                                 }
                                             }
                                             a {
@@ -244,9 +194,9 @@ suspend fun ApplicationCall.chatPage() {
                                             div(classes = "main-message-box ta-right") {
                                                 div(classes = "message-dt") {
                                                     div(classes = "message-inner-dt") {
-                                                        p { + "Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit." }
+                                                        p { +"Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit." }
                                                     }
-                                                    span { + "Sat, Aug 23, 1:08 PM" }
+                                                    span { +"Sat, Aug 23, 1:08 PM" }
                                                 }
                                                 div(classes = "messg-usr-img") {
                                                     img {
@@ -257,9 +207,9 @@ suspend fun ApplicationCall.chatPage() {
                                             div(classes = "main-message-box st3") {
                                                 div(classes = "message-dt st3") {
                                                     div(classes = "message-inner-dt") {
-                                                        p { + "Un long messge ici" }
+                                                        p { +"Un long messge ici" }
                                                     }
-                                                    span { + "2 minutes ago" }
+                                                    span { +"2 minutes ago" }
                                                 }
                                                 div(classes = "messg-usr-img") {
                                                     img {
@@ -271,9 +221,9 @@ suspend fun ApplicationCall.chatPage() {
                                             div(classes = "main-message-box ta-right") {
                                                 div(classes = "message-dt") {
                                                     div(classes = "message-inner-dt") {
-                                                        p { + "Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit." }
+                                                        p { +"Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit." }
                                                     }
-                                                    span { + "Sat, Aug 23, 1:08 PM" }
+                                                    span { +"Sat, Aug 23, 1:08 PM" }
                                                 }
                                                 div(classes = "messg-usr-img") {
                                                     img {
@@ -284,9 +234,9 @@ suspend fun ApplicationCall.chatPage() {
                                             div(classes = "main-message-box st3") {
                                                 div(classes = "message-dt st3") {
                                                     div(classes = "message-inner-dt") {
-                                                        p { + "..." }
+                                                        p { +"..." }
                                                     }
-                                                    span { + "Typing..." }
+                                                    span { +"Typing..." }
                                                 }
                                                 div(classes = "messg-usr-img") {
                                                     img {
@@ -298,9 +248,9 @@ suspend fun ApplicationCall.chatPage() {
                                             div(classes = "main-message-box ta-right") {
                                                 div(classes = "message-dt") {
                                                     div(classes = "message-inner-dt") {
-                                                        p { + "Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit." }
+                                                        p { +"Zappy is an entirely automatic game where some computer programs play amongst them-  selves. The game speed is defined by a time unit." }
                                                     }
-                                                    span { + "Sat, Aug 23, 1:08 PM" }
+                                                    span { +"Sat, Aug 23, 1:08 PM" }
                                                 }
                                                 div(classes = "messg-usr-img") {
                                                     img {
@@ -311,9 +261,9 @@ suspend fun ApplicationCall.chatPage() {
                                             div(classes = "main-message-box st3") {
                                                 div(classes = "message-dt st3") {
                                                     div(classes = "message-inner-dt") {
-                                                        p { + "..." }
+                                                        p { +"..." }
                                                     }
-                                                    span { + "Typing..." }
+                                                    span { +"Typing..." }
                                                 }
                                                 div(classes = "messg-usr-img") {
                                                     img {
@@ -332,7 +282,7 @@ suspend fun ApplicationCall.chatPage() {
                                                     }
                                                     button {
                                                         type = ButtonType.submit
-                                                        + "Send"
+                                                        +"Send"
                                                     }
                                                 }
                                                 ul {
@@ -375,47 +325,47 @@ suspend fun ApplicationCall.chatPage() {
                                     a() {
                                         href = "#"
                                         title = ""
-                                        + "Intra"
+                                        +"Intra"
                                     }
                                 }
                                 li {
                                     a() {
                                         href = "#"
                                         title = ""
-                                        + "School"
+                                        +"School"
                                     }
                                 }
                                 li {
                                     a() {
                                         href = "#"
                                         title = ""
-                                        + "Privacy Policy"
+                                        +"Privacy Policy"
                                     }
                                 }
                                 li {
                                     a() {
                                         href = "#"
                                         title = ""
-                                        + "Cookies Policy"
+                                        +"Cookies Policy"
                                     }
                                 }
                                 li {
                                     a() {
                                         href = "#"
                                         title = ""
-                                        + "Shop"
+                                        +"Shop"
                                     }
                                 }
                                 li {
                                     a() {
                                         href = "#"
                                         title = ""
-                                        + "Developed by @brabo-hi"
+                                        +"Developed by @brabo-hi"
                                     }
                                 }
                             }
-                            p{
-                                + "Copyright 2018"
+                            p {
+                                +"Copyright 2018"
                                 img {
                                     src = "/public/images/copy-icon2.png"
                                     alt = ""

@@ -1,41 +1,41 @@
 package repository
 
-import data.Users
 import data.User
 import data.UserData
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.*
+import data.Users
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insertAndGetId
 
 
 object UserRepository {
 
-    fun getAll() : List<User> {
+    fun getAll(): List<User> {
         return User.all().toList()
     }
 
-    fun getAll(op: Op<Boolean>) : List<User> {
+    fun getAll(op: Op<Boolean>): List<User> {
         return User.find { op }.toList()
     }
 
-    fun get(id: Int) : User? {
+    fun get(id: Int): User? {
         return User.findById(id)
     }
 
-    fun get(op: Op<Boolean>) : User? {
+    fun get(op: Op<Boolean>): User? {
         val find = User.find { op }
         if (find.empty()) return null
         return find.single()
     }
 
-    fun getByUsername(username: String) : User? {
-        val users : List<User> = getAll(Users.username eq username)
+    fun getByUsername(username: String): User? {
+        val users: List<User> = getAll(Users.username eq username)
         return if (users.isEmpty() || users.size != 1) null else users.first()
     }
 
-    fun getByUsernameAndPassword(username: String, password: String) : User? {
-        val users : List<User> = getAll(Users.username.eq(username) and Users.password.eq(password))
+    fun getByUsernameAndPassword(username: String, password: String): User? {
+        val users: List<User> = getAll(Users.username.eq(username) and Users.password.eq(password))
         return if (users.isEmpty() || users.size != 1) null else users.first()
     }
 
@@ -59,20 +59,20 @@ object UserRepository {
         return get(id)
     }
 
-    fun update(username: String, userData: UserData) : User? {
+    fun update(username: String, userData: UserData): User? {
         val user = getByUsername(username = username) ?: return null
-            user.username = userData.username
-            user.email = userData.email
-            user.firstName = userData.firstName
-            user.lastName = userData.lastName
-            user.age = userData.age
-            user.password = userData.password
-            user.photo = userData.photo
-            user.gender = userData.gender
-            user.campus = userData.campus
-            user.biography = userData.biography
-            user.isActivate = userData.isActivate
-            user.code = userData.code
+        user.username = userData.username
+        user.email = userData.email
+        user.firstName = userData.firstName
+        user.lastName = userData.lastName
+        user.age = userData.age
+        user.password = userData.password
+        user.photo = userData.photo
+        user.gender = userData.gender
+        user.campus = userData.campus
+        user.biography = userData.biography
+        user.isActivate = userData.isActivate
+        user.code = userData.code
         return user
     }
 
@@ -80,7 +80,7 @@ object UserRepository {
         get(id)?.delete()
     }
 
-    fun userToUserdate(user: User, userData: UserData) : UserData {
+    fun userToUserdate(user: User, userData: UserData): UserData {
         userData.username = user.username
         userData.email = user.email
         userData.firstName = user.firstName
@@ -95,7 +95,7 @@ object UserRepository {
         return userData
     }
 
-    fun toUserdate(user: User) : UserData {
+    fun toUserdate(user: User): UserData {
         return UserData(username = user.username,
                 email = user.email,
                 firstName = user.firstName,

@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.Column
 import org.joda.time.DateTime
 
 object Likes : IntIdTable() {
-    val username1 : Column<String> = reference("like_username1", Users.username)
-    val username2 : Column<String> = reference("like_username2", Users.username)
-    val date : Column<DateTime> = datetime("date")
+    val username1: Column<String> = reference("like_username1", Users.username)
+    val username2: Column<String> = reference("like_username2", Users.username)
+    val date: Column<DateTime> = datetime("date")
 }
 
-class Like(id: EntityID<Int>): IntEntity(id) {
+class Like(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Like>(Likes)
 
     var username1 by Likes.username1

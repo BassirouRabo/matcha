@@ -1,71 +1,20 @@
 package pages
 
+import ActivateUrl
+import LoginUrl
+import RegisterUrl
+import data.Users
 import io.ktor.application.ApplicationCall
 import io.ktor.html.respondHtml
 import io.ktor.locations.locations
-import io.ktor.request.uri
-import io.ktor.response.respondText
 import kotlinx.html.*
-import ActivateUrl
-import RegisterUrl
-import data.Users
+import template.headTemplate
+import template.scripTempate
 
 suspend fun ApplicationCall.activatePage(username: String) {
     respondHtml {
 
-        head {
-            meta(charset = "UTF-8")
-            title { +"42 Date | Sign in" }
-            meta(name = "viewport") {
-                content = "width=device-width, initial-scale=1.0"
-            }
-            meta(name = "description") {
-                content = ""
-            }
-            meta(name = "keywords") {
-                content = ""
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/animate.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/bootstrap.min.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/flatpickr.min.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/line-awesome.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/line-awesome-font-awesome.min.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/font-awesome.min.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/lib/slick/slick.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/lib/slick/slick-theme.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/style.css"
-            }
-            link(rel = "stylesheet") {
-                type = "text/css"
-                href = "/public/css/responsive.css"
-            }
-        }
+        head { headTemplate("Activate account") }
 
         body(classes = "sign-in") {
             div(classes = "wrapper") {
@@ -84,7 +33,7 @@ suspend fun ApplicationCall.activatePage(username: String) {
                                 div(classes = "col-lg-6") {
                                     div(classes = "login-sec") {
                                         div(classes = "sign_in_sec current") {
-                                            h3 { + "Activate" }
+                                            h3 { +"Activate" }
                                             form(locations.href(ActivateUrl(username)), encType = FormEncType.multipartFormData, method = FormMethod.post) {
                                                 div(classes = "row") {
                                                     div(classes = "col-lg-12 no-pdd") {
@@ -105,7 +54,21 @@ suspend fun ApplicationCall.activatePage(username: String) {
                                                         button() {
                                                             type = ButtonType.submit
                                                             value = "submit"
-                                                            + "activate"
+                                                            +"activate"
+                                                        }
+                                                    }
+                                                    div(classes = "message-btn") {
+                                                        a {
+                                                            href = locations.href(LoginUrl())
+                                                            title = "Login"
+                                                            i(classes = "la la-sign-out") {}
+                                                            +"Login"
+                                                        }
+                                                        a {
+                                                            href = locations.href(RegisterUrl())
+                                                            title = "Register"
+                                                            i(classes = "la la-sign-out") {}
+                                                            +"Register"
                                                         }
                                                     }
                                                 }
@@ -160,10 +123,7 @@ suspend fun ApplicationCall.activatePage(username: String) {
                     }
                 }
             }
-            script(type = "text/javascript") { src = "/public/js/jquery.min.js" }
-            script(type = "text/javascript") { src = "/public/js/popper.js" }
-            script(type = "text/javascript") { src = "/public/js/bootstrap.min.js" }
-            script(type = "text/javascript") { src = "/public/js/script.js" }
+            scripTempate()
         }
     }
 }

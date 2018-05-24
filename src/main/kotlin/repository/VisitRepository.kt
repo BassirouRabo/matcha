@@ -9,29 +9,29 @@ import org.jetbrains.exposed.sql.insertAndGetId
 import org.joda.time.DateTime
 
 object VisitRepository {
-    fun getAll() : List<Visit> {
+    fun getAll(): List<Visit> {
         return Visit.all().toList()
     }
 
-    fun getAll(op: Op<Boolean>) : List<Visit> {
+    fun getAll(op: Op<Boolean>): List<Visit> {
         return Visit.find { op }.toList()
     }
 
-    fun getVisits(username1: String) : List<Visit> {
+    fun getVisits(username1: String): List<Visit> {
         return getAll(Visits.username1.eq(username1))
     }
 
-    fun getVisiteds(username1: String) : List<Visit> {
+    fun getVisiteds(username1: String): List<Visit> {
         return getAll(Visits.username2.eq(username1))
     }
 
-    fun get(op: Op<Boolean>) : Visit? {
+    fun get(op: Op<Boolean>): Visit? {
         val find = Visit.find { op }
         if (find.empty()) return null
         return find.single()
     }
 
-    fun get(id: Int) : Visit? {
+    fun get(id: Int): Visit? {
         return Visit.findById(id)
     }
 

@@ -1,19 +1,18 @@
-
+import Campus.FREMONT
+import Campus.PARIS
+import Gender.FEMALE
+import Gender.MALE
 import data.User
 import data.UserData
 import data.Users
-import io.ktor.application.ApplicationCall
 import io.ktor.application.application
 import io.ktor.application.call
 import io.ktor.locations.get
+import io.ktor.locations.location
 import io.ktor.locations.locations
-import io.ktor.locations.*
 import io.ktor.locations.post
-import io.ktor.request.receive
 import io.ktor.request.receiveParameters
-import io.ktor.request.uri
 import io.ktor.response.respondRedirect
-import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -21,33 +20,27 @@ import io.ktor.sessions.clear
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import org.jetbrains.exposed.sql.transactions.transaction
-import pages.*
-import repository.UserRepository
-import Gender.*
-import Campus.*
-import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.transactions.transaction
+import pages.*
 import repository.LikeRepository
+import repository.UserRepository
 import repository.UserRepository.toUserdate
-import repository.UserRepository.userToUserdate
 import repository.VisitRepository
-import java.util.logging.Logger
 
 fun Routing.homeRoute() {
     location<HomeUrl> {
         get {
             if (call.sessions.get<Session>() == null)
                 call.respondRedirect(application.locations.href(LoginUrl()))
-            else
-            {
+            else {
                 var users: List<User> = listOf()
                 transaction {
                     users = UserRepository.getAll()
                 }
-                call.homePage(users, users, users)
+                call.homePage(users, users)
             }
         }
     }
@@ -62,22 +55,19 @@ fun Routing.loginRoute() {
             var user: User? = null
             val params = call.receiveParameters()
 
-            val username : String? = params[Users.username.name]
-            val password : String? = params[Users.password.name]
+            val username: String? = params[Users.username.name]
+            val password: String? = params[Users.password.name]
 
             if (username == null || password == null) call.respondRedirect(application.locations.href(LoginUrl()))
             transaction {
                 user = UserRepository.getByUsernameAndPassword(username!!, password!!)
             }
             if (user == null) call.respondRedirect(application.locations.href(LoginUrl()))
-            else
-            {
-                if (user!!.isActivate)
-                {
+            else {
+                if (user!!.isActivate) {
                     call.sessions.set(Session(username = user!!.username))
                     call.respondRedirect(application.locations.href(HomeUrl()))
-                }
-                else call.respondRedirect(application.locations.href(ActivateUrl(username!!)))
+                } else call.respondRedirect(application.locations.href(ActivateUrl(username!!)))
             }
         }
     }
@@ -85,49 +75,51 @@ fun Routing.loginRoute() {
 
 fun Routing.logoutRoute() {
     location<LogoutUrl> {
-        get{
+        get {
             call.sessions.clear<Session>()
+            println("LOGOUT SESSION ${call.sessions.get<Session>()?.username}")
             call.respondRedirect(application.locations.href(HomeUrl()))
         }
     }
 }
 
 fun Routing.registerRoute() {
-        get<RegisterUrl> {
-            call.registerPage()
-        }
+    get<RegisterUrl> {
+        call.registerPage()
+    }
 
-        post<RegisterUrl> {
-            val params = call.receiveParameters()
+    post<RegisterUrl> {
+        val params = call.receiveParameters()
 
-            val username : String? = params[Users.username.name]
-            val email : String? = params[Users.email.name]
-            val firstName : String? = params[Users.firstName.name]
-            val lastName : String? = params[Users.lastName.name]
-            val age : Int? = params[Users.age.name]?.toInt()
-            val password : String? = params[Users.password.name]
-            val photo : String? = params[Users.photo.name]
-            val gender : String? = params[Users.gender.name]
-            val campus : String? = params[Users.campus.name]
+        val username: String? = params[Users.username.name]
+        val email: String? = params[Users.email.name]
+        val firstName: String? = params[Users.firstName.name]
+        val lastName: String? = params[Users.lastName.name]
+        val age: Int? = params[Users.age.name]?.toInt()
+        val password: String? = params[Users.password.name]
+        val photo: String? = params[Users.photo.name]
+        val gender: String? = params[Users.gender.name]
+        val campus: String? = params[Users.campus.name]
 
-            if (username.equals(null)
-                    || email.equals(null)
-                    || firstName.equals(null)
-                    || lastName.equals(null)
-                    || age == 0
-                    || password.equals(null)
-                    || gender.equals(null)
-                    || campus.equals(null)) {
-                call.respondRedirect(application.locations.href(RegisterUrl()))
-            } else {
-                transaction {
-                    logger.addLogger(StdOutSqlLogger)
-                    val user: User? = UserRepository.getByUsername(username!!)
-                    if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = "My biography", photo = photo ?: "photo.jpg", isActivate = false, code = 1234, gender = if(gender.equals("Male")) MALE else FEMALE, campus = if(campus.equals("Paris")) PARIS else FREMONT))
-                }
-                call.respondRedirect(application.locations.href(LoginUrl()))
+        if (username.equals(null)
+                || email.equals(null)
+                || firstName.equals(null)
+                || lastName.equals(null)
+                || age == 0
+                || password.equals(null)
+                || gender.equals(null)
+                || campus.equals(null)) {
+            call.respondRedirect(application.locations.href(RegisterUrl()))
+        } else {
+            transaction {
+                logger.addLogger(StdOutSqlLogger)
+                val user: User? = UserRepository.getByUsername(username!!)
+                if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = "My biography", photo = photo
+                        ?: "photo.jpg", isActivate = false, code = 1234, gender = if (gender.equals("Male")) MALE else FEMALE, campus = if (campus.equals("Paris")) PARIS else FREMONT))
             }
+            call.respondRedirect(application.locations.href(LoginUrl()))
         }
+    }
 }
 
 fun Routing.activateRoute() {
@@ -141,7 +133,7 @@ fun Routing.activateRoute() {
         val params = call.receiveParameters()
         val username = call.parameters[Users.username.name]
         val code = params[Users.code.name]
-        if (username == null)  call.respondRedirect(application.locations.href(LoginUrl()))
+        if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else if (code == null) call.respondRedirect(application.locations.href(ActivateUrl(username)))
         else {
             transaction {
@@ -168,16 +160,16 @@ fun Routing.userRoute() {
         val session = call.sessions.get<Session>()
         if (session == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
+            println("SESSION ${session.username}")
             transaction {
                 user = UserRepository.getByUsername(userUrl.username)
             }
             if (user == null) call.respondRedirect(application.locations.href(HomeUrl()))
-            else if (user!!.username.equals(session.username))
-            {
+            else if (user!!.username.equals(session.username)) {
                 val likes: MutableList<User> = mutableListOf<User>()
-                val likeds  : MutableList<User> = mutableListOf<User>()
-                val visits : MutableList<User> = mutableListOf<User>()
-                val visiteds : MutableList<User> = mutableListOf<User>()
+                val likeds: MutableList<User> = mutableListOf<User>()
+                val visits: MutableList<User> = mutableListOf<User>()
+                val visiteds: MutableList<User> = mutableListOf<User>()
                 transaction {
                     VisitRepository.getVisits(session.username).forEach { visit ->
                         UserRepository.getByUsername(visit.username2)?.let { visits.add(UserRepository.getByUsername(visit.username2)!!) }
@@ -193,9 +185,7 @@ fun Routing.userRoute() {
                     }
                 }
                 call.profilPage(user!!, likes, likeds, visits, visiteds)
-            }
-            else
-            {
+            } else {
                 transaction {
                     VisitRepository.add(session.username, user!!.username)
                 }
@@ -210,7 +200,33 @@ fun Routing.userRoute() {
 }
 
 fun Routing.chatRoute() {
-    get<ChatUrl> {chatUrl ->
+    get<ChatUrl> { chatUrl ->
         call.chatPage()
+    }
+}
+
+fun Routing.likeRoute() {
+    get<LikeUrl> { likeUrl ->
+        val username = call.sessions.get<Session>()?.username
+        if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        else {
+            transaction {
+                LikeRepository.like(username, likeUrl.username)
+            }
+            call.respondRedirect(application.locations.href(UserUrl(likeUrl.username)))
+        }
+    }
+}
+
+fun Routing.unlikeRoute() {
+    get<UnLikeUrl> { unlikeUrl ->
+        val username = call.sessions.get<Session>()?.username
+        if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        else {
+            transaction {
+                LikeRepository.unlike(username, unlikeUrl.username)
+            }
+            call.respondRedirect(application.locations.href(UserUrl(unlikeUrl.username)))
+        }
     }
 }

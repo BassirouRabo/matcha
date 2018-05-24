@@ -4,7 +4,7 @@ fun getGender(gender: Gender) = when (gender) {
     else -> "Male"
 }
 
-fun getCampus(campus: Campus) = when(campus) {
+fun getCampus(campus: Campus) = when (campus) {
     Campus.PARIS -> "Paris"
     Campus.FREMONT -> "Fremont"
     else -> "Paris"
