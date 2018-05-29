@@ -10,6 +10,7 @@ import io.ktor.locations.Locations
 import io.ktor.routing.Routing
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
+import io.ktor.websocket.WebSockets
 
 @Location("/")
 class HomeUrl()
@@ -38,7 +39,23 @@ data class UserUrl(val username: String)
 @Location("/{username}/chats")
 data class ChatUrl(val username: String)
 
+@Location("/{username}/info")
+data class InfoUrl(val username: String)
+
+@Location("/{username}/photos")
+data class PhotoUrl(val username: String)
+
+@Location("/{username}/bloque")
+data class BloqueUrl(val username: String)
+
+@Location("/{username}/unbloque")
+data class UnbloqueUrl(val username: String)
+
+@Location("/{username}/report")
+data class ReportUrl(val username: String)
+
 data class Session(val username: String)
+
 
 fun Application.main() {
     db.connect()
@@ -47,6 +64,7 @@ fun Application.main() {
     install(DefaultHeaders)
     // install(CallLogging)
     install(Locations)
+    install(WebSockets)
     install(ConditionalHeaders)
     install(Sessions) {
         cookie<Session>(SESSION)
@@ -65,6 +83,11 @@ fun Application.main() {
         chatRoute()
         likeRoute()
         unlikeRoute()
+        infoRoute()
+        photoRoute()
+        bloqueRoute()
+        unbloqueRoute()
+        reportRoute()
     }
 }
 

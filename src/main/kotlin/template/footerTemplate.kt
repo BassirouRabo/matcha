@@ -61,3 +61,8 @@ fun DIV.footerTemplate(): Unit {
         }
     }
 }
+
+fun name() {
+    "Hello world".forEach { }.also {  }
+}
+

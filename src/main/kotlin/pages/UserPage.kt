@@ -1,3 +1,4 @@
+import data.Bloque
 import data.User
 import io.ktor.application.ApplicationCall
 import io.ktor.html.respondHtml
@@ -6,6 +7,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import kotlinx.html.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import repository.BloqueRepository
 import repository.LikeRepository
 import template.*
 
@@ -22,7 +24,7 @@ suspend fun ApplicationCall.userPage(user: User) {
 
                 headerTemplate(username)
 
-                coverTemplate()
+                coverTemplate("user")
 
                 section {
                     div(classes = "main-section") {
@@ -34,54 +36,92 @@ suspend fun ApplicationCall.userPage(user: User) {
                                             div(classes = "user_profile") {
                                                 div(classes = "user-pro-img") {
                                                     img() {
-                                                        src = "http://via.placeholder.com/170x170"
-                                                        alt = ""
+                                                        if (user.photo.equals("default"))
+                                                            src = "public/photos/170x170.png"
+                                                        else
+                                                            src = "public/photos/${user.photo}"
+                                                        alt = "Profil of ${user.username}"
+                                                        width = "170"
+                                                        height = "170"
                                                     }
                                                 }
-                                                div(classes = "user_pro_status") {
-                                                    ul(classes = "flw-hr") {
-                                                        li {
-                                                            transaction {
-                                                                val matching = LikeRepository.getMatch(username, user.username)
-                                                                println("matching ${matching}")
-                                                                if (matching == Matching.A1B) {
-                                                                    a(classes = "pending") {
-                                                                        href = locations.href(UnLikeUrl(user.username))
-                                                                        title = "Unlike"
-                                                                        i(classes = "la la-times-circle") {}
-                                                                        +"pending"
-                                                                    }
-                                                                } else if (matching == Matching.A2B) {
-                                                                    a(classes = "like") {
-                                                                        href = locations.href(UnLikeUrl(user.username))
-                                                                        title = "Unlike"
-                                                                        i(classes = "la la-users") {}
-                                                                        +"Unlike"
-                                                                    }
-                                                                    a(classes = "like") {
-                                                                        href = "#"
-                                                                        title = "Message"
-                                                                        i(classes = "fa fa-envelope")
-                                                                        +"Message"
-                                                                    }
-                                                                } else {
-                                                                    a(classes = "unlike") {
-                                                                        href = locations.href(LikeUrl(user.username))
-                                                                        title = "like"
-                                                                        i(classes = "la la-plus") {}
-                                                                        +"Like"
+                                                if (user.photo.equals("default")
+                                                        && user.photo1.equals("default")
+                                                        && user.photo2.equals("default")
+                                                        && user.photo3.equals("default")
+                                                        && user.photo4.equals("default")
+                                                        && user.photo5.equals("default")
+                                                        && user.photo6.equals("default")) {
+                                                    div(classes = "user_pro_status") {
+                                                        ul(classes = "flw-hr") {
+                                                            li {
+                                                                transaction {
+                                                                    val matching = LikeRepository.getMatch(username, user.username)
+                                                                    if (matching == Matching.A1B) {
+                                                                        a(classes = "pending") {
+                                                                            href = locations.href(UnLikeUrl(user.username))
+                                                                            title = "Unlike"
+                                                                            i(classes = "la la-times-circle") {}
+                                                                            +"pending"
+                                                                        }
+                                                                    } else if (matching == Matching.A2B) {
+                                                                        a(classes = "like") {
+                                                                            href = locations.href(UnLikeUrl(user.username))
+                                                                            title = "Unlike"
+                                                                            i(classes = "la la-users") {}
+                                                                            +"Unlike"
+                                                                        }
+                                                                        a(classes = "like") {
+                                                                            href = "#"
+                                                                            title = "Message"
+                                                                            i(classes = "fa fa-envelope")
+                                                                            +"Message"
+                                                                        }
+                                                                    } else {
+                                                                        a(classes = "unlike") {
+                                                                            href = locations.href(LikeUrl(user.username))
+                                                                            title = "like"
+                                                                            i(classes = "la la-plus") {}
+                                                                            +"Like"
+                                                                        }
                                                                     }
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                    ul(classes = "flw-hr") {
-                                                        li {
-                                                            a(classes = "logout") {
-                                                                href = locations.href("#")
-                                                                title = "Block"
-                                                                i(classes = "la la-user-times") {}
-                                                                +"Block"
+                                                        ul(classes = "flw-hr") {
+                                                            var bloque : Bloque? = null
+                                                            transaction {
+                                                                bloque  = BloqueRepository.get(username, user.username)
+                                                            }
+                                                            if (bloque == null) {
+                                                                li {
+                                                                    a(classes = "like") {
+                                                                        href = locations.href(BloqueUrl(user.username))
+                                                                        title = "Block"
+                                                                        i(classes = "la la-user-times") {}
+                                                                        +"Block"
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                li {
+                                                                    a(classes = "logout") {
+                                                                        href = locations.href(UnbloqueUrl(user.username))
+                                                                        title = "Block"
+                                                                        i(classes = "la la-user-times") {}
+                                                                        +"Unblock"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+                                                        ul(classes = "flw-hr") {
+                                                            li {
+                                                                a(classes = "logout") {
+                                                                    href = locations.href(ReportUrl(user.username))
+                                                                    title = "Report"
+                                                                    i(classes = "la la-user-times") {}
+                                                                    +"Report fake acount"
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -138,54 +178,12 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                 div(classes = "portfolio-gallery-sec") {
                                                     div(classes = "gallery_pf") {
                                                         div(classes = "row") {
-                                                            div(classes = "col-lg-4 col-md-4 col-sm-6 col-6") {
-                                                                div(classes = "gallery_pt") {
-                                                                    img {
-                                                                        src = "http://via.placeholder.com/271x174"
-                                                                        alt = ""
-                                                                    }
-                                                                    a {
-                                                                        href = "#"
-                                                                        title = ""
-                                                                        img {
-                                                                            src = "images/all-out.png"
-                                                                            alt = ""
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            div(classes = "col-lg-4 col-md-4 col-sm-6 col-6") {
-                                                                div(classes = "gallery_pt") {
-                                                                    img {
-                                                                        src = "http://via.placeholder.com/271x174"
-                                                                        alt = ""
-                                                                    }
-                                                                    a {
-                                                                        href = "#"
-                                                                        title = ""
-                                                                        img {
-                                                                            src = "images/all-out.png"
-                                                                            alt = ""
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            div(classes = "col-lg-4 col-md-4 col-sm-6 col-6") {
-                                                                div(classes = "gallery_pt") {
-                                                                    img {
-                                                                        src = "http://via.placeholder.com/271x174"
-                                                                        alt = ""
-                                                                    }
-                                                                    a {
-                                                                        href = "#"
-                                                                        title = ""
-                                                                        img {
-                                                                            src = "images/all-out.png"
-                                                                            alt = ""
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
+                                                            if (!user.photo1.equals("default")) photoTemplate(user.photo1)
+                                                            if (!user.photo2.equals("default")) photoTemplate(user.photo2)
+                                                            if (!user.photo3.equals("default")) photoTemplate(user.photo3)
+                                                            if (!user.photo4.equals("default")) photoTemplate(user.photo4)
+                                                            if (!user.photo5.equals("default")) photoTemplate(user.photo5)
+                                                            if (!user.photo6.equals("default")) photoTemplate(user.photo6)
                                                         }
                                                     }
                                                 }

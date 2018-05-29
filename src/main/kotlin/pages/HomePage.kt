@@ -13,7 +13,7 @@ import template.headTemplate
 import template.headerTemplate
 import template.scripTempate
 
-suspend fun ApplicationCall.homePage(users: List<User>, onlines: List<User>) {
+suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List<User>) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -23,6 +23,7 @@ suspend fun ApplicationCall.homePage(users: List<User>, onlines: List<User>) {
         body {
 
             div(classes = "wrapper") {
+
                 headerTemplate(username)
 
                 div(classes = "search-sec") {

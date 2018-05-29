@@ -1,5 +1,7 @@
 package repository
 
+import PHOTO
+import PHOTOFULL
 import data.User
 import data.UserData
 import data.Users
@@ -7,6 +9,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertAndGetId
+import org.jetbrains.exposed.sql.transactions.transaction
 
 
 object UserRepository {
@@ -39,8 +42,12 @@ object UserRepository {
         return if (users.isEmpty() || users.size != 1) null else users.first()
     }
 
+    fun report(username: String) {
+        val user = getByUsername(username)
+        if (user != null) { user.isReport = true }
+    }
+
     fun add(userData: UserData): User? {
-        println("ADD")
         if (getByUsername(userData.username) != null) return null
         val id = Users.insertAndGetId {
             it[Users.username] = userData.username
@@ -49,12 +56,25 @@ object UserRepository {
             it[Users.lastName] = userData.lastName
             it[Users.age] = userData.age
             it[Users.password] = userData.password
-            it[Users.photo] = userData.photo
             it[Users.gender] = userData.gender
             it[Users.campus] = userData.campus
             it[Users.biography] = userData.biography
             it[Users.isActivate] = userData.isActivate
             it[Users.code] = userData.code
+            it[Users.score] = 0
+            it[Users.orientation] = Orientation.BI
+            it[Users.tagBio] = false
+            it[Users.tagGeek] = false
+            it[Users.tagPiercing] = false
+            it[Users.tagSmart] = false
+            it[Users.tagShy] = false
+            it[Users.photo] = PHOTO
+            it[Users.photo1] = PHOTOFULL
+            it[Users.photo2] = PHOTOFULL
+            it[Users.photo3] = PHOTOFULL
+            it[Users.photo4] = PHOTOFULL
+            it[Users.photo5] = PHOTOFULL
+            it[Users.photo6] = PHOTOFULL
         }.value
         return get(id)
     }
@@ -67,12 +87,25 @@ object UserRepository {
         user.lastName = userData.lastName
         user.age = userData.age
         user.password = userData.password
-        user.photo = userData.photo
         user.gender = userData.gender
         user.campus = userData.campus
         user.biography = userData.biography
         user.isActivate = userData.isActivate
         user.code = userData.code
+        user.score = userData.score
+        user.orientation = userData.orientation
+        user.tagBio = userData.tagBio
+        user.tagGeek = userData.tagGeek
+        user.tagPiercing = userData.tagPiercing
+        user.tagSmart = userData.tagSmart
+        user.tagShy = userData.tagShy
+        user.photo = userData.photo
+        user.photo1 = userData.photo1
+        user.photo2 = userData.photo2
+        user.photo3 = userData.photo3
+        user.photo4 = userData.photo4
+        user.photo5 = userData.photo5
+        user.photo6 = userData.photo6
         return user
     }
 
@@ -87,11 +120,23 @@ object UserRepository {
         userData.lastName = user.lastName
         userData.age = user.age
         userData.password = user.password
-        userData.photo = user.photo
         userData.gender = user.gender
         userData.biography = user.biography
         userData.isActivate = user.isActivate
-        userData.code = user.code
+        userData.score = user.score
+        userData.orientation = user.orientation
+        userData.tagBio = user.tagBio
+        userData.tagGeek = user.tagGeek
+        userData.tagPiercing = user.tagPiercing
+        userData.tagSmart = user.tagSmart
+        userData.tagShy = user.tagShy
+        userData.photo = user.photo
+        userData.photo1 = user.photo1
+        userData.photo2 = user.photo2
+        userData.photo3 = user.photo3
+        userData.photo4 = user.photo4
+        userData.photo5 = user.photo5
+        userData.photo6 = user.photo6
         return userData
     }
 
@@ -102,12 +147,25 @@ object UserRepository {
                 lastName = user.lastName,
                 age = user.age,
                 password = user.password,
-                photo = user.photo,
                 gender = user.gender,
                 campus = user.campus,
                 biography = user.biography,
                 isActivate = user.isActivate,
-                code = user.code
+                code = user.code,
+                score = user.score,
+                orientation = user.orientation,
+                tagBio = user.tagBio,
+                tagGeek = user.tagGeek,
+                tagPiercing = user.tagPiercing,
+                tagSmart = user.tagSmart,
+                tagShy = user.tagShy,
+                photo = user.photo,
+                photo1 = user.photo1,
+                photo2 = user.photo2,
+                photo3 = user.photo3,
+                photo4 = user.photo4,
+                photo5 = user.photo5,
+                photo6 = user.photo6
         )
     }
 

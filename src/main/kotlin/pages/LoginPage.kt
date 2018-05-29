@@ -8,6 +8,8 @@ import io.ktor.html.respondHtml
 import io.ktor.locations.locations
 import kotlinx.html.*
 import template.headTemplate
+import template.registerFootTemplate
+import template.registerLeftTemplate
 import template.scripTempate
 
 suspend fun ApplicationCall.loginPage() {
@@ -21,14 +23,7 @@ suspend fun ApplicationCall.loginPage() {
                     div(classes = "signin-popup") {
                         div(classes = "signin-pop") {
                             div(classes = "row") {
-                                div(classes = "col-lg-6") {
-                                    div(classes = "cmp-info") {
-                                        div(classes = "cm-logo") { }
-                                        img(src = "/public/images/logo_42_dating.png") {
-                                            alt = ""
-                                        }
-                                    }
-                                }
+                                registerLeftTemplate()
                                 div(classes = "col-lg-6") {
                                     div(classes = "login-sec") {
                                         div(classes = "sign_in_sec current") {
@@ -79,48 +74,7 @@ suspend fun ApplicationCall.loginPage() {
                             }
                         }
                     }
-                    div(classes = "footy-sec") {
-                        div(classes = "container") {
-                            ul {
-                                li {
-                                    a(href = "#") {
-                                        title = ""
-                                        +"School"
-                                    }
-                                }
-                                li {
-                                    a(href = "#") {
-                                        title = ""
-                                        +"Privacy Policy"
-                                    }
-                                }
-                                li {
-                                    a(href = "#") {
-                                        title = ""
-                                        +"Campus"
-                                    }
-                                }
-                                li {
-                                    a(href = "#") {
-                                        title = ""
-                                        +"Cookies Policy"
-                                    }
-                                }
-                                li {
-                                    a(href = "#") {
-                                        title = ""
-                                        +"Shop"
-                                    }
-                                }
-                            }
-                            p {
-                                img(src = "/public/images/copy-icon.png") {
-                                    alt = ""
-                                    +"Copyright @brabo-hi 2018"
-                                }
-                            }
-                        }
-                    }
+                    registerFootTemplate()
                 }
             }
             scripTempate()

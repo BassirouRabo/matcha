@@ -17,8 +17,9 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import kotlinx.html.*
 import template.*
+import PhotoUrl
 
-suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: List<User>, visits: List<User>, visiteds: List<User>) {
+suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: List<User>, visits: List<User>, visiteds: List<User>, bloques : List<User>) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -30,7 +31,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
 
                 headerTemplate(username)
 
-                coverTemplate()
+                coverTemplate("profil")
 
                 section {
                     div(classes = "main-section") {
@@ -42,8 +43,13 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                             div(classes = "user_profile") {
                                                 div(classes = "user-pro-img") {
                                                     img {
-                                                        src = "http://via.placeholder.com/170x170"
-                                                        alt = ""
+                                                        if (user.photo.equals("default"))
+                                                            src = "public/photos/170x170.png"
+                                                        else
+                                                            src = "public/photos/${user.photo}"
+                                                        alt = "Profil of ${user.username}"
+                                                        width = "170"
+                                                        height = "170"
                                                     }
                                                     a {
                                                         href = "#"
@@ -75,7 +81,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 span { +"Info" }
                                                             }
                                                         }
-                                                        li(classes = "") {
+                                                        li {
                                                             attributes["data-tab"] = "like"
                                                             a {
                                                                 href = "#"
@@ -87,7 +93,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 span { +"Like ${likes.size}" }
                                                             }
                                                         }
-                                                        li(classes = "") {
+                                                        li {
                                                             attributes["data-tab"] = "liked"
                                                             a {
                                                                 href = "#"
@@ -99,7 +105,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 span { +"Liked by ${likeds.size}" }
                                                             }
                                                         }
-                                                        li(classes = "") {
+                                                        li {
                                                             attributes["data-tab"] = "visit"
                                                             a {
                                                                 href = "#"
@@ -111,16 +117,28 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 span { +"Visits ${visits.size}" }
                                                             }
                                                         }
-                                                        li(classes = "") {
+                                                        li {
                                                             attributes["data-tab"] = "visited"
                                                             a {
                                                                 href = "#"
                                                                 title = ""
                                                                 img {
-                                                                    src = "public/images/ic6.png"
+                                                                    src = "public/images/ic3.png"
                                                                     alt = ""
                                                                 }
                                                                 span { +"Visited by ${visiteds.size}" }
+                                                            }
+                                                        }
+                                                        li {
+                                                            attributes["data-tab"] = "bloque"
+                                                            a {
+                                                                href = "#"
+                                                                title = "Bloque"
+                                                                img {
+                                                                    src = "public/images/ic7.png"
+                                                                    alt = ""
+                                                                }
+                                                                span { +"Bloque ${bloques.size}" }
                                                             }
                                                         }
                                                     }
@@ -129,7 +147,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                             div(classes = "product-feed-tab current") {
                                                 id = "info-dd"
                                                 div(classes = "user-profile-ov") {
-                                                    h3(classes = "") {
+                                                    h3 {
                                                         a(classes = "overview-open") {
                                                             href = "#"
                                                             title = ""
@@ -168,6 +186,12 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                     visiteds.forEach { user -> userTemplate(user) }
                                                 }
                                             }
+                                            div(classes = "product-feed-tab") {
+                                                id = "bloque"
+                                                div(classes = "posts-section") {
+                                                    bloques.forEach { user -> userTemplate(user) }
+                                                }
+                                            }
                                         }
                                     }
                                     div(classes = "col-lg-3") {
@@ -190,16 +214,12 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                 }
                                                 div(classes = "pf-gallery") {
                                                     ul {
-                                                        li {
-                                                            a {
-                                                                href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "http://via.placeholder.com/70x70"
-                                                                    alt = ""
-                                                                }
-                                                            }
-                                                        }
+                                                        if (!user.photo1.equals("default")) sidePhotoTemplate(user.photo1)
+                                                        if (!user.photo2.equals("default")) sidePhotoTemplate(user.photo2)
+                                                        if (!user.photo3.equals("default")) sidePhotoTemplate(user.photo3)
+                                                        if (!user.photo4.equals("default")) sidePhotoTemplate(user.photo4)
+                                                        if (!user.photo5.equals("default")) sidePhotoTemplate(user.photo5)
+                                                        if (!user.photo6.equals("default")) sidePhotoTemplate(user.photo6)
                                                     }
                                                 }
                                             }
@@ -216,9 +236,9 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                 div(classes = "overview-box") {
                     id = "overview-box"
                     div(classes = "overview-edit") {
-                        h3 { +"Overview" }
+                        h3 { +"About me" }
                         span { +"5000 character left" }
-                        form {
+                        form(locations.href(PhotoUrl(user.username)), encType = FormEncType.multipartFormData, method = FormMethod.post) {
                             textInput {
                                 name = Users.username.name
                                 value = user.username
@@ -281,6 +301,41 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                 name = Users.password.name
                                 placeholder = "Password"
                                 required = true
+                            }
+                            i(classes = "la la-camera-retro") {}
+                            fileInput {
+                                name = Users.photo.name
+                                accept = "image/*"
+                            }
+                            i(classes = "la la-photo") { }
+                            fileInput {
+                                name = Users.photo1.name
+                                accept = "image/*"
+                            }
+                            i(classes = "la la-photo") { }
+                            fileInput {
+                                name = Users.photo2.name
+                                accept = "image/*"
+                            }
+                            i(classes = "la la-photo") { }
+                            fileInput {
+                                name = Users.photo3.name
+                                accept = "image/*"
+                            }
+                            i(classes = "la la-photo") { }
+                            fileInput {
+                                name = Users.photo4.name
+                                accept = "image/*"
+                            }
+                            i(classes = "la la-photo") { }
+                            fileInput {
+                                name = Users.photo5.name
+                                accept = "image/*"
+                            }
+                            i(classes = "la la-photo") { }
+                            fileInput {
+                                name = Users.photo6.name
+                                accept = "image/*"
                             }
                             button(classes = "save") {
                                 type = ButtonType.submit
