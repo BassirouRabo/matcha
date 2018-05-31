@@ -13,6 +13,7 @@ import java.io.OutputStream
 val SESSION: String = "SESSION"
 val PHOTO: String = "default"
 val PHOTOFULL: String = "default"
+val PHOTO_SRC: String = "src/main/resources/photos"
 
 object db {
     fun connect() {

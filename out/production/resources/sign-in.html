@@ -20,8 +20,11 @@
 
 <body class="sign-in">
 
-
 <div class="wrapper">
+
+    <div id="msg">HELLO
+        <button id="btn">He</button>
+    </div>
 
 
     <div class="sign-in-page">
@@ -162,5 +165,22 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
+
+<script>
+    window.addEventListener("load", function(event) {
+        var out = '<div class="main-message-box st3"> <div class="message-dt st3"> <div class="message-inner-dt"> <p>Zappy is an entirely automatic game where some computer programs play amongst them- selves. . </p> </div> <span>2 minutes ago</span> </div> <div class="messg-usr-img"> <img src="http://via.placeholder.com/50x50" alt=""> </div> </div>';
+
+        var pre = document.createElement("div");
+        pre.innerHTML = out;
+
+        var pre1 = document.createElement("div");
+        pre1.innerHTML = out;
+        document.getElementById('btn').addEventListener("click", function(){
+            document.getElementById('msg').appendChild(pre);
+            document.getElementById('msg').appendChild(pre1);
+        });
+    });
+</script>
+
 </body>
 </html>

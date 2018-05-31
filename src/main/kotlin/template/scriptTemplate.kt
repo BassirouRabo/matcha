@@ -4,7 +4,6 @@ import kotlinx.html.BODY
 import kotlinx.html.script
 
 fun BODY.scripTempate(): Unit {
-    script(type = "text/javascript") { src = "/public/js/jquery.min.js" }
     script(type = "text/javascript") { src = "/public/js/popper.js" }
     script(type = "text/javascript") { src = "/public/js/bootstrap.min.js" }
     script(type = "text/javascript") { src = "/public/js/jquery.mCustomScrollbar.js" }

@@ -5,12 +5,17 @@ import io.ktor.content.files
 import io.ktor.content.static
 import io.ktor.features.ConditionalHeaders
 import io.ktor.features.DefaultHeaders
+import io.ktor.http.cio.websocket.*
+import io.ktor.http.cio.websocket.CloseReason
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.locations.Location
 import io.ktor.locations.Locations
 import io.ktor.routing.Routing
+import io.ktor.routing.routing
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.websocket.WebSockets
+import io.ktor.websocket.webSocket
 
 @Location("/")
 class HomeUrl()
@@ -36,8 +41,8 @@ class UnLikeUrl(val username: String)
 @Location("/{username}")
 data class UserUrl(val username: String)
 
-@Location("/{username}/chats")
-data class ChatUrl(val username: String)
+@Location("/{username1}/chats/{username2}")
+data class ChatUrl(val username1: String, val username2: String)
 
 @Location("/{username}/info")
 data class InfoUrl(val username: String)

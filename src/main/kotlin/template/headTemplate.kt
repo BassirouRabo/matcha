@@ -1,9 +1,6 @@
 package template
 
-import kotlinx.html.HEAD
-import kotlinx.html.link
-import kotlinx.html.meta
-import kotlinx.html.title
+import kotlinx.html.*
 
 fun HEAD.headTemplate(title: String): Unit {
     meta(charset = "UTF-8")
@@ -64,5 +61,11 @@ fun HEAD.headTemplate(title: String): Unit {
     link(rel = "stylesheet") {
         type = "text/css"
         href = "/public/css/responsive.css"
+    }
+    script(type = "text/javascript") {
+        src = "/public/js/jquery-3.3.1.min.js"
+    }
+    script(type = "text/javascript") {
+        src = "/public/js/chat.js"
     }
 }

@@ -6,12 +6,20 @@ import data.User
 import io.ktor.application.ApplicationCall
 import io.ktor.html.respondHtml
 import io.ktor.locations.locations
+import io.ktor.network.sockets.aSocket
+import io.ktor.network.sockets.openReadChannel
+import io.ktor.network.sockets.openWriteChannel
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
+import kotlinx.coroutines.experimental.io.readASCIILine
+import kotlinx.coroutines.experimental.io.writeBytes
+import kotlinx.coroutines.experimental.launch
 import kotlinx.html.*
 import template.headTemplate
 import template.headerTemplate
 import template.scripTempate
+import java.net.InetSocketAddress
+import java.net.SocketAddress
 
 suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List<User>) {
     val username = sessions.get<Session>()!!.username

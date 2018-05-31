@@ -10,6 +10,9 @@ import io.ktor.application.call
 import io.ktor.content.MultiPartData
 import io.ktor.content.PartData
 import io.ktor.content.forEachPart
+import io.ktor.http.cio.websocket.CloseReason
+import io.ktor.http.cio.websocket.close
+import io.ktor.http.cio.websocket.readText
 import io.ktor.locations.get
 import io.ktor.locations.location
 import io.ktor.locations.locations
@@ -27,7 +30,10 @@ import io.ktor.sessions.clear
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
+import io.ktor.websocket.webSocket
 import kotlinx.coroutines.experimental.CoroutineDispatcher
+import kotlinx.coroutines.experimental.channels.consumeEach
+import kotlinx.coroutines.experimental.channels.mapNotNull
 import kotlinx.coroutines.experimental.withContext
 import kotlinx.coroutines.experimental.yield
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -40,9 +46,11 @@ import repository.LikeRepository
 import repository.UserRepository
 import repository.UserRepository.toUserdate
 import repository.VisitRepository
+import java.awt.Frame
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
+import io.ktor.http.cio.websocket.Frame.Text
 
 fun Routing.homeRoute() {
     location<HomeUrl> {
@@ -215,8 +223,29 @@ fun Routing.userRoute() {
 
 fun Routing.chatRoute() {
     get<ChatUrl> { chatUrl ->
-        call.chatPage()
+        var user1 : User? = null
+        var user2 : User? = null
+        val username : String? = call.sessions.get<Session>()?.username
+        if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        else {
+            if (username != chatUrl.username1)  call.respondRedirect(application.locations.href(UserUrl(username)))
+            else {
+                transaction {
+                    user1 = UserRepository.getByUsername(chatUrl.username1)
+                    user2 = UserRepository.getByUsername(chatUrl.username2)
+                }
+                if (user1 == null || user2 == null) call.respondRedirect(application.locations.href(LoginUrl()))
+                else call.chatPage(user1!!, user2!!)
+            }
+        }
     }
+    webSocket("/ws") { // websocketSession
+        incoming.mapNotNull { it as? io.ktor.http.cio.websocket.Frame.Text }.consumeEach { frame ->
+            val text = frame.readText().also { println(it.toUpperCase()) }
+            outgoing.send(io.ktor.http.cio.websocket.Frame.Text("YOU SAID $text"))
+        }
+    }
+
 }
 
 fun Routing.likeRoute() {
@@ -287,7 +316,7 @@ fun Routing.photoRoute() {
     post<PhotoUrl> { photoUrl ->
         var user : User? = null
         val multipart = call.receiveMultipart()
-        val uploadDir = File("src/main/resources/photos")
+        val uploadDir = File(PHOTO_SRC)
         transaction {
             user = UserRepository.getByUsername(photoUrl.username)
         }
