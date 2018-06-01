@@ -14,6 +14,10 @@ val SESSION: String = "SESSION"
 val PHOTO: String = "default"
 val PHOTOFULL: String = "default"
 val PHOTO_SRC: String = "src/main/resources/photos"
+val MSG_CHAT = "CHAT"
+val MSG_ONLINE = "ONLINE"
+val MSG_SEPARATOR = "||"
+val MSG_INIT = "INIT"
 
 object db {
     fun connect() {

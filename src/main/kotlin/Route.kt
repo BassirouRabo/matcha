@@ -53,6 +53,7 @@ fun Routing.homeRoute() {
     location<HomeUrl> {
         get {
             var user : User? = null
+            var onlines : List<User> = listOf()
             val username : String? = call.sessions.get<Session>()?.username
             if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
             else {
@@ -60,11 +61,13 @@ fun Routing.homeRoute() {
                 transaction {
                     users = UserRepository.getAll()
                     user = UserRepository.getByUsername(username)
+                    onlines = UserRepository.getAll(Users.isOnline eq true).filter { it.username != username }
                 }
                 if (user!!.score == 0){
                     call.respondRedirect(application.locations.href(InfoUrl(username)))
                 } else {
-                    call.homePage(user!!, users, users)
+                   // Chat.memberJoin(username)
+                    call.homePage(user!!, users, onlines)
                 }
             }
         }
@@ -101,6 +104,14 @@ fun Routing.loginRoute() {
 fun Routing.logoutRoute() {
     location<LogoutUrl> {
         get {
+
+            val username = call.sessions.get<Session>()?.username?.let {
+                transaction {
+                    UserRepository.getByUsername(it)?.let {
+                        Chat.memberLeft(it)
+                    }
+                }
+            }
             call.sessions.clear<Session>()
             call.respondRedirect(application.locations.href(HomeUrl()))
         }
@@ -202,7 +213,7 @@ fun Routing.userRoute() {
                         LikeRepository.getLikes(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { likes.add(it) } }
                         LikeRepository.getLikeds(session.username).forEach { UserRepository.getByUsername(it.username1)?.let { likes.add(it) } }
                         BloqueRepository.getBloques(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { bloques.add(it) } }
-                        chats = ChatRepository.getChats(session.username).also { println("** " + it.size) }
+                        chats = ChatRepository.getChats(session.username)
                     }
                     call.profilPage(user!!, likes, likeds, visits, visiteds, bloques, chats)
                 } else {
@@ -339,7 +350,6 @@ fun Routing.photoRoute() {
                         if (!part.originalFileName.isNullOrEmpty()) {
                             val ext = File(part.originalFileName).extension
                             val file = File(uploadDir, "${user!!.username}-${System.currentTimeMillis()}.$ext")
-                           // println("file.absolutePath [${file.absolutePath}]\nName [${file.name}]\nPath [${file.path}]")
                             part.streamProvider().use { its -> file.outputStream().buffered().use { its.copyToSuspend(it) } }
                             transaction {
                                 when (part.name) {

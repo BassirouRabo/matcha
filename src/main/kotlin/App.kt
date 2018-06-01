@@ -74,7 +74,7 @@ data class Session(val username: String)
 fun Application.main() {
     db.connect()
     db.init()
-    val chat = Chat()
+    val chat = Chat
 
     install(DefaultHeaders)
     // install(CallLogging)
@@ -104,12 +104,12 @@ fun Application.main() {
         unbloqueRoute()
         reportRoute()
 
-        webSocket("/ws/{username1}/{username2}") { // websocketSession
+        webSocket("/ws/{username1}/{username2}") {
             var user : User? = null
             var user1 : User? = null
             var user2 : User? = null
-            var username1 = call.parameters["username1"]
-            var username2 = call.parameters["username2"]
+            val username1 = call.parameters["username1"]
+            val username2 = call.parameters["username2"]
 
             val username : String? = call.sessions.get<Session>()?.username
             if (username == null || username1  == null ||username2 == null) call.respondRedirect(application.locations.href(LoginUrl()))
@@ -125,8 +125,8 @@ fun Application.main() {
 
                     try {
                         incoming.mapNotNull { it as? io.ktor.http.cio.websocket.Frame.Text }.consumeEach { frame ->
-                            chat.sendMessage(user1!!, user2!!, frame.readText())
-                          //  outgoing.send(io.ktor.http.cio.websocket.Frame.Text(frame.readText()))
+                            val msg = frame.readText()
+                            if (msg != MSG_INIT) chat.sendMessage(user1!!, user2!!, msg)
                         }
                     } finally {
                         chat.memberLeft(user!!)

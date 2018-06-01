@@ -49,7 +49,7 @@ object ChatRepository {
     }
 
     fun getAll(username1: String, username2: String): List<Chat> {
-        return getAll(Chats.username1.eq(username1) and Chats.username2.eq(username2))
+        return getAll((Chats.username1.eq(username1) and Chats.username2.eq(username2)) or (Chats.username1.eq(username2) and Chats.username2.eq(username1)))
     }
 
     fun add(username1: String, username2: String, message : String): Chat? {

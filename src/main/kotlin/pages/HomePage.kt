@@ -15,9 +15,7 @@ import kotlinx.coroutines.experimental.io.readASCIILine
 import kotlinx.coroutines.experimental.io.writeBytes
 import kotlinx.coroutines.experimental.launch
 import kotlinx.html.*
-import template.headTemplate
-import template.headerTemplate
-import template.scripTempate
+import template.*
 import java.net.InetSocketAddress
 import java.net.SocketAddress
 
@@ -292,192 +290,25 @@ suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List
                                             }
                                         }
                                     }
-                                    div(classes = "col-lg-3") {
-                                        div(classes = "suggestionsth full-width") {
-                                            div(classes = "sd-title") {
-                                                h3 { +"Online" }
-                                            }
-                                            div(classes = "suggestions-list") {
-                                                onlines.forEach { online ->
-                                                    div(classes = "suggestion-usd") {
-                                                        a {
-                                                            href = locations.href(UserUrl(online.username))
-                                                            img() {
-                                                                alt = ""
-                                                                src = "http://via.placeholder.com/35x35"
-                                                            }
-                                                            div(classes = "sgt-text") {
-                                                                h4 { +online.username }
-                                                                span { +online.firstName }
-                                                            }
-                                                        }
-                                                        span {
-                                                            i(classes = "la la-plus") {}
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                    sideOnlineTemplate(onlines)
                                 }
                             }
                         }
                     }
                 }
-
-                div(classes = "chatbox-list") {
-                    div(classes = "chatbox") {
-                        div(classes = "chat-mg") {
-                            a(href = "#") {
-                                title = ""
-                                img(src = "http://via.placeholder.com/70x70") {
-                                    alt = ""
-                                }
-                            }
-                            span { +"2" }
-                        }
-                        div(classes = "conversation-box") {
-                            div(classes = "con-title mg-3") {
-                                div(classes = "chat-user-info") {
-                                    img(src = "http://via.placeholder.com/34x33") {
-                                        alt = ""
-                                    }
-                                    h3 {
-                                        +"Brabo Hi"
-                                        span(classes = "status-info") {}
-                                    }
-                                }
-                                div(classes = "st-icons") {
-                                    a() {
-                                        href = "#"
-                                        title = ""
-                                        i(classes = "la la-cog") { }
-                                    }
-                                    a(classes = "close-chat") {
-                                        href = "#"
-                                        title = ""
-                                        i(classes = "la la-minus-square") {}
-                                    }
-                                    a(classes = "close-chat") {
-                                        href = "#"
-                                        title = ""
-                                        i(classes = "la la-close") {}
-                                    }
-                                }
-                            }
-                            div(classes = "chat-hist mCustomScrollbar") {
-                                attributes["data-mcs-theme"] = "dark"
-                                div(classes = "chat-msg") {
-                                    p { +"Zappy is an entirely automatic game where some computer programs play amongst them- selves. The game speed is defined by a time unit. Each action in the game has a duration" }
-                                    span { +"Sat, Aug 23, 1:10 PM" }
-                                }
-                                div(classes = "date-nd") {
-                                    span { +"Sunday, August 24" }
-                                }
-                                div(classes = "chat-msg st2") {
-                                    p { +"Un petit message ici" }
-                                    span { +"5 minutes ago" }
-                                }
-                                div(classes = "chat-msg") {
-                                    p { +"Zappy is an entirely automatic game where some computer programs play amongst them- selves. The game speed is defined by a time unit. Each action in the game has a duration" }
-                                    span { +"Sat, Aug 23, 1:10 PM" }
-                                }
-                            }
-                            div(classes = "typing-msg") {
-                                form() {
-                                    textArea() {
-                                        placeholder = "Type a message here"
-                                    }
-                                    buttonInput {
-                                        i(classes = "fa fa-send") {}
-                                    }
-                                }
-                                ul(classes = "ft-options") {
-                                    li(classes = "") {
-                                        a(classes = "") {
-                                            href = "#"
-                                            title = ""
-                                            i(classes = "la la-smile-o") { }
-                                            i(classes = "la la-camera") { }
-                                            i(classes = "fa fa-paperclip") { }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    div(classes = "chatbox") {
-                        div(classes = "chat-mg bx") {
-                            a(classes = "") {
-                                href = "#"
-                                title = ""
-                                img(alt = "") {
-                                    src = "public/images/chat.png"
-                                }
-                            }
-                            span { +"2" }
-                        }
-                        div(classes = "conversation-box") {
-                            div(classes = "con-title") {
-                                h3 { +"Messages" }
-                                a(classes = "close-chat") {
-                                    href = "#"
-                                    i(classes = "la la-minus-square") { }
-                                }
-                            }
-                            div(classes = "chat-list") {
-                                div(classes = "conv-list active") {
-                                    div(classes = "usrr-pic") {
-                                        img(alt = "") {
-                                            src = "http://via.placeholder.com/50x50"
-                                        }
-                                        span(classes = "active-status activee") { }
-                                    }
-                                    div(classes = "usy-info") {
-                                        h3 { +"Brabo Hi" }
-                                        span { +"Un petit message" }
-                                    }
-                                    div(classes = "ct-time") {
-                                        span { +"1:55 PM" }
-                                    }
-                                    span(classes = "msg-numbers") { +"2" }
-                                }
-                                div(classes = "conv-list") {
-                                    div(classes = "usrr-pic") {
-                                        img(alt = "") {
-                                            src = "http://via.placeholder.com/50x50"
-                                        }
-                                    }
-                                    div(classes = "usy-info") {
-                                        h3 { +"Brabo Hi" }
-                                        span { +"Un petit message" }
-                                    }
-                                    div(classes = "ct-time") {
-                                        span { +"11:39 PM" }
-                                    }
-                                }
-                                div(classes = "conv-list") {
-                                    div(classes = "usrr-pic") {
-                                        img(alt = "") {
-                                            src = "http://via.placeholder.com/50x50"
-                                        }
-                                    }
-                                    div(classes = "usy-info") {
-                                        h3 { +"Brabo Hi" }
-                                        span { +"Un petit message" }
-                                    }
-                                    div(classes = "ct-time") {
-                                        span { +"0.28 AM" }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
             }
 
             scripTempate()
+
+            hiddenInput {
+                id = "username1"
+                value = username
+            }
+
+            hiddenInput {
+                id = "username2"
+                value = username
+            }
         }
 
     }
