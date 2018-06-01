@@ -8,6 +8,7 @@ import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import Orientation
+import org.joda.time.DateTime
 
 object Users : IntIdTable() {
     val username: Column<String> = varchar("username", 20).uniqueIndex()
@@ -20,7 +21,9 @@ object Users : IntIdTable() {
     val campus = enumeration("campus", Campus::class.java)
     val isActivate: Column<Boolean> = bool("is_activate")
     val isReport: Column<Boolean> = bool("is_report")
+    val isOnline: Column<Boolean> = bool("is_online")
     val code: Column<Int> = integer("code")
+    val date: Column<DateTime> = datetime("date")
 
     val biography: Column<String> = text("biography")
     val score : Column<Int> = integer("score")
@@ -54,7 +57,9 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     var campus by Users.campus
     var isActivate by Users.isActivate
     var isReport by Users.isReport
+    var isOnline by Users.isOnline
     var code by Users.code
+    var date by Users.date
     var biography by Users.biography
     var score by Users.score
     var orientation by Users.orientation
@@ -82,7 +87,9 @@ data class UserData(var username: String,
                     var campus: Campus,
                     var isActivate: Boolean = false,
                     var isReport: Boolean = false,
+                    var isOnline: Boolean = false,
                     var code: Int,
+                    var date: DateTime,
                     var biography: String = "",
                     var score: Int = 0,
                     var orientation : Orientation = Orientation.BI,

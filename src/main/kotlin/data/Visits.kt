@@ -22,5 +22,5 @@ class Visit(id: EntityID<Int>) : IntEntity(id) {
 }
 
 data class VisitData(var username1: String,
-                     val username2: String,
-                     val date: DateTime)
+                     var username2: String,
+                     var date: DateTime)

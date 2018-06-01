@@ -19,7 +19,7 @@ import kotlinx.html.*
 import template.*
 import PhotoUrl
 
-suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: List<User>, visits: List<User>, visiteds: List<User>, bloques : List<User>) {
+suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: List<User>, visits: List<User>, visiteds: List<User>, bloques : List<User>, chats : List<User>) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -43,10 +43,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                             div(classes = "user_profile") {
                                                 div(classes = "user-pro-img") {
                                                     img {
-                                                        if (user.photo.equals("default"))
-                                                            src = "public/photos/170x170.png"
-                                                        else
-                                                            src = "public/photos/${user.photo}"
+                                                        if (user.photo.equals("default")) src = "public/photos/170x170.png" else src = "public/photos/${user.photo}"
                                                         alt = "Profil of ${user.username}"
                                                         width = "170"
                                                         height = "170"
@@ -135,10 +132,22 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = "Bloque"
                                                                 img {
-                                                                    src = "public/images/ic7.png"
+                                                                    src = "public/images/ic3.png"
                                                                     alt = ""
                                                                 }
                                                                 span { +"Bloque ${bloques.size}" }
+                                                            }
+                                                        }
+                                                        li {
+                                                            attributes["data-tab"] = "chats"
+                                                            a {
+                                                                href = "#"
+                                                                title = "Message"
+                                                                img {
+                                                                    src = "public/images/ic3.png"
+                                                                    alt = ""
+                                                                }
+                                                                span { + "Msg ${chats.size}" }
                                                             }
                                                         }
                                                     }
@@ -190,6 +199,35 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                 id = "bloque"
                                                 div(classes = "posts-section") {
                                                     bloques.forEach { user -> userTemplate(user) }
+                                                }
+                                            }
+                                            div(classes = "product-feed-tab") {
+                                                id = "chats"
+                                                div(classes = "posts-section") {
+                                                    chats.forEach { user ->
+                                                        div(classes = "post-bar") {
+                                                            div(classes = "post_topbar") {
+                                                                a {
+                                                                    href = "$username/chats/${user.username}"
+                                                                    title = "Profil : ${user.username}"
+                                                                    div(classes = "usy-dt") {
+                                                                        img {
+                                                                            src = if (user.photo.equals("default")) "public/photos/170x170.png" else "public/photos/${user.photo}"
+                                                                            alt = ""
+                                                                            width = "50"
+                                                                            height = "50"
+                                                                        }
+                                                                        div(classes = "usy-name") {
+                                                                            h3 { +" ${user.username}" }
+                                                                            span {
+                                                                                +" ${user.firstName}"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

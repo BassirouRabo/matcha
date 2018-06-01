@@ -5,6 +5,7 @@ import Gender.MALE
 import data.User
 import data.UserData
 import data.Users
+import data.Chats
 import io.ktor.application.application
 import io.ktor.application.call
 import io.ktor.content.MultiPartData
@@ -18,9 +19,6 @@ import io.ktor.locations.location
 import io.ktor.locations.locations
 import io.ktor.locations.post
 import io.ktor.network.util.ioCoroutineDispatcher
-import io.ktor.request.isMultipart
-import io.ktor.request.receiveMultipart
-import io.ktor.request.receiveParameters
 import io.ktor.response.respondRedirect
 import io.ktor.response.respondWrite
 import io.ktor.routing.Routing
@@ -41,16 +39,15 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import pages.*
-import repository.BloqueRepository
-import repository.LikeRepository
-import repository.UserRepository
 import repository.UserRepository.toUserdate
-import repository.VisitRepository
 import java.awt.Frame
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import io.ktor.http.cio.websocket.Frame.Text
+import io.ktor.request.*
+import org.joda.time.DateTime
+import repository.*
 
 fun Routing.homeRoute() {
     location<HomeUrl> {
@@ -141,7 +138,7 @@ fun Routing.registerRoute() {
             transaction {
                 logger.addLogger(StdOutSqlLogger)
                 val user: User? = UserRepository.getByUsername(username!!)
-                if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, password = password!!, biography = "My biography", photo = photo
+                if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, date = DateTime.now(), password = password!!, biography = "My biography", photo = photo
                         ?: "default", isActivate = false, code = 1234, gender = if (gender.equals("Male")) MALE else FEMALE, campus = if (campus.equals("Paris")) PARIS else FREMONT))
             }
             call.respondRedirect(application.locations.href(LoginUrl()))
@@ -198,14 +195,16 @@ fun Routing.userRoute() {
                     val visits: MutableList<User> = mutableListOf<User>()
                     val visiteds: MutableList<User> = mutableListOf<User>()
                     val bloques: MutableList<User> = mutableListOf<User>()
+                    var chats : List<User> = listOf()
                     transaction {
                         VisitRepository.getVisits(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { visits.add(it) } }
                         VisitRepository.getVisiteds(session.username).forEach { UserRepository.getByUsername(it.username1)?.let { visiteds.add(it) } }
                         LikeRepository.getLikes(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { likes.add(it) } }
                         LikeRepository.getLikeds(session.username).forEach { UserRepository.getByUsername(it.username1)?.let { likes.add(it) } }
                         BloqueRepository.getBloques(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { bloques.add(it) } }
+                        chats = ChatRepository.getChats(session.username).also { println("** " + it.size) }
                     }
-                    call.profilPage(user!!, likes, likeds, visits, visiteds, bloques)
+                    call.profilPage(user!!, likes, likeds, visits, visiteds, bloques, chats)
                 } else {
                     transaction {
                         VisitRepository.add(session.username, user!!.username)
@@ -225,6 +224,7 @@ fun Routing.chatRoute() {
     get<ChatUrl> { chatUrl ->
         var user1 : User? = null
         var user2 : User? = null
+        var chats : List<data.Chat> = listOf()
         val username : String? = call.sessions.get<Session>()?.username
         if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
@@ -233,19 +233,18 @@ fun Routing.chatRoute() {
                 transaction {
                     user1 = UserRepository.getByUsername(chatUrl.username1)
                     user2 = UserRepository.getByUsername(chatUrl.username2)
+
                 }
                 if (user1 == null || user2 == null) call.respondRedirect(application.locations.href(LoginUrl()))
-                else call.chatPage(user1!!, user2!!)
+                else {
+                    transaction {
+                        chats = ChatRepository.getAll(username1 = user1!!.username, username2 = user2!!.username)
+                    }
+                    call.chatPage(user1!!, user2!!, chats)
+                }
             }
         }
     }
-    webSocket("/ws") { // websocketSession
-        incoming.mapNotNull { it as? io.ktor.http.cio.websocket.Frame.Text }.consumeEach { frame ->
-            val text = frame.readText().also { println(it.toUpperCase()) }
-            outgoing.send(io.ktor.http.cio.websocket.Frame.Text("YOU SAID $text"))
-        }
-    }
-
 }
 
 fun Routing.likeRoute() {

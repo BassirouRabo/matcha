@@ -1,3 +1,4 @@
+import data.User
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.content.default
@@ -10,12 +11,20 @@ import io.ktor.http.cio.websocket.CloseReason
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.locations.Location
 import io.ktor.locations.Locations
+import io.ktor.locations.locations
+import io.ktor.response.respondRedirect
 import io.ktor.routing.Routing
 import io.ktor.routing.routing
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
+import kotlinx.coroutines.experimental.channels.consumeEach
+import kotlinx.coroutines.experimental.channels.mapNotNull
+import org.jetbrains.exposed.sql.transactions.transaction
+import repository.UserRepository
 
 @Location("/")
 class HomeUrl()
@@ -65,6 +74,7 @@ data class Session(val username: String)
 fun Application.main() {
     db.connect()
     db.init()
+    val chat = Chat()
 
     install(DefaultHeaders)
     // install(CallLogging)
@@ -93,6 +103,37 @@ fun Application.main() {
         bloqueRoute()
         unbloqueRoute()
         reportRoute()
+
+        webSocket("/ws/{username1}/{username2}") { // websocketSession
+            var user : User? = null
+            var user1 : User? = null
+            var user2 : User? = null
+            var username1 = call.parameters["username1"]
+            var username2 = call.parameters["username2"]
+
+            val username : String? = call.sessions.get<Session>()?.username
+            if (username == null || username1  == null ||username2 == null) call.respondRedirect(application.locations.href(LoginUrl()))
+            else {
+                transaction {
+                    user = UserRepository.getByUsername(username)
+                    user1 = UserRepository.getByUsername(username1)
+                    user2 = UserRepository.getByUsername(username2)
+                }
+                if (user == null || user1 == null || user2 == null || user != user1) call.respondRedirect(application.locations.href(HomeUrl()))
+                else {
+                    chat.memberJoin(user1!!, this)
+
+                    try {
+                        incoming.mapNotNull { it as? io.ktor.http.cio.websocket.Frame.Text }.consumeEach { frame ->
+                            chat.sendMessage(user1!!, user2!!, frame.readText())
+                          //  outgoing.send(io.ktor.http.cio.websocket.Frame.Text(frame.readText()))
+                        }
+                    } finally {
+                        chat.memberLeft(user!!)
+                    }
+                }
+            }
+        }
     }
 }
 

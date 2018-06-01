@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 
 
 object UserRepository {
@@ -60,8 +61,10 @@ object UserRepository {
             it[Users.campus] = userData.campus
             it[Users.biography] = userData.biography
             it[Users.isActivate] = userData.isActivate
+            it[Users.isOnline] = false
             it[Users.code] = userData.code
             it[Users.score] = 0
+            it[Users.date] = DateTime.now()
             it[Users.orientation] = Orientation.BI
             it[Users.tagBio] = false
             it[Users.tagGeek] = false
@@ -91,8 +94,10 @@ object UserRepository {
         user.campus = userData.campus
         user.biography = userData.biography
         user.isActivate = userData.isActivate
+        user.isOnline = userData.isOnline
         user.code = userData.code
         user.score = userData.score
+        user.date = userData.date
         user.orientation = userData.orientation
         user.tagBio = userData.tagBio
         user.tagGeek = userData.tagGeek
@@ -123,7 +128,9 @@ object UserRepository {
         userData.gender = user.gender
         userData.biography = user.biography
         userData.isActivate = user.isActivate
+        userData.isOnline = user.isOnline
         userData.score = user.score
+        userData.date = user.date
         userData.orientation = user.orientation
         userData.tagBio = user.tagBio
         userData.tagGeek = user.tagGeek
@@ -151,8 +158,10 @@ object UserRepository {
                 campus = user.campus,
                 biography = user.biography,
                 isActivate = user.isActivate,
+                isOnline = user.isOnline,
                 code = user.code,
                 score = user.score,
+                date = user.date,
                 orientation = user.orientation,
                 tagBio = user.tagBio,
                 tagGeek = user.tagGeek,

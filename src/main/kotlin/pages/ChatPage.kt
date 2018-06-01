@@ -14,7 +14,7 @@ import template.*
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
-suspend fun ApplicationCall.chatPage(user1: User, user2: User) {
+suspend fun ApplicationCall.chatPage(user1: User, user2: User, chats : List<data.Chat>) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -78,6 +78,7 @@ suspend fun ApplicationCall.chatPage(user1: User, user2: User) {
                                         // div(classes = "messages-line")
                                         div {
                                             id =  "message"
+                                            chats.forEach { if (it.username1 == username) chatInTemplate(it) else if (it.username2 == username) chatOutTemplate(it) }
                                         }
                                         div(classes = "messages-line") { id = ""  }
                                         div(classes = "message-send-area") {
@@ -89,7 +90,6 @@ suspend fun ApplicationCall.chatPage(user1: User, user2: User) {
                                                 }
                                                 button {
                                                     id = "btn"
-                                                    // type = ButtonType.submit
                                                     +"Send"
                                                 }
                                             }
@@ -99,6 +99,16 @@ suspend fun ApplicationCall.chatPage(user1: User, user2: User) {
                             }
                         }
                     }
+                }
+
+                hiddenInput {
+                    id = "username1"
+                    value = user1.username
+                }
+
+                hiddenInput {
+                    id = "username2"
+                    value = user2.username
                 }
 
                 footerTemplate()

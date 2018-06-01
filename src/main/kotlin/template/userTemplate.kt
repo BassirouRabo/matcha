@@ -14,16 +14,14 @@ fun DIV.userTemplate(user: User) : Unit {
                 title = "Profil : ${user.username}"
                 div(classes = "usy-dt") {
                     img {
-                        src = "http://via.placeholder.com/50x50"
-                        alt = ""
+                        src = if (user.photo.equals("default")) "public/photos/170x170.png" else "public/photos/${user.photo}"
+                        alt = user.username
+                        width = "50"
+                        height = "50"
                     }
                     div(classes = "usy-name") {
                         h3 { +" ${user.username}" }
                         span {
-                            img {
-                                src = "images/clock.png"
-                                alt = ""
-                            }
                             +" ${user.firstName}"
                         }
                     }
