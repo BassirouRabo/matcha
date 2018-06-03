@@ -126,11 +126,9 @@ fun Application.main() {
                     try {
                         incoming.mapNotNull { it as? io.ktor.http.cio.websocket.Frame.Text }.consumeEach { frame ->
                             val msg = frame.readText()
-                            if (msg != MSG_INIT) chat.sendMessage(user1!!, user2!!, msg)
+                            if (msg != MSG_INIT) chat.sendMessage(username1 = user1!!.username, username2 = user2!!.username, type = MSG_CHAT, message = msg)
                         }
-                    } finally {
-                        chat.memberLeft(user!!)
-                    }
+                    } finally { chat.memberLeft(user!!) }
                 }
             }
         }

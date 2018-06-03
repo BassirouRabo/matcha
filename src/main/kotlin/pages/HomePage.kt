@@ -276,8 +276,8 @@ suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List
                                                                         alt = ""
                                                                     }
                                                                     div(classes = "usy-name") {
-                                                                        h3 { +user.username }
-                                                                        span { +user.firstName }
+                                                                        h3 { + user.username }
+                                                                        span { + user.firstName }
                                                                     }
                                                                 }
                                                             }
@@ -290,7 +290,7 @@ suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List
                                             }
                                         }
                                     }
-                                    sideOnlineTemplate(onlines)
+                                    sideNotificationTemplate(onlines)
                                 }
                             }
                         }
@@ -300,15 +300,7 @@ suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List
 
             scripTempate()
 
-            hiddenInput {
-                id = "username1"
-                value = username
-            }
-
-            hiddenInput {
-                id = "username2"
-                value = username
-            }
+            hiddenTemplate(username, username)
         }
 
     }

@@ -60,9 +60,9 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                     div(classes = "col-lg-6") {
                                         div(classes = "main-ws-sec") {
                                             div(classes = "user-tab-sec") {
-                                                h3 { +"Brabo-hi" }
+                                                h3 { + user.username }
                                                 div(classes = "star-descp") {
-                                                    span { +"Bassirou Rabo Hima" }
+                                                    span { + "${user.firstName} ${user.lastName}" }
                                                 }
                                                 div(classes = "tab-feed st2") {
                                                     ul {
@@ -75,7 +75,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                     src = "public/images/ic2.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Info" }
+                                                                span { + "Info" }
                                                             }
                                                         }
                                                         li {
@@ -87,7 +87,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                     src = "public/images/ic4.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Like ${likes.size}" }
+                                                                span { + "Like ${likes.size}" }
                                                             }
                                                         }
                                                         li {
@@ -391,6 +391,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
             }
 
             scripTempate()
+            hiddenTemplate(username, username)
         }
     }
 }

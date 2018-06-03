@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.*
 import kotlin.collections.HashMap
 
 object Chat {
-    val members : MutableMap<String, WebSocketSession> = mutableMapOf()
+    private val members : MutableMap<String, WebSocketSession> = mutableMapOf()
 
     suspend fun memberJoin(user : User, socket: WebSocketSession) {
         if (!members.containsKey(user.username)) {
@@ -36,15 +36,14 @@ object Chat {
         }
     }
 
-    suspend fun sendMessage(user1 : User, user2: User, message : String) {
-        members[user2.username]?.let { it.send(Frame.Text("$MSG_CHAT$MSG_SEPARATOR${user2.username}$MSG_SEPARATOR$message")) }
-        transaction {  ChatRepository.add(username1 = user1.username, username2 = user2.username, message = message) }
+    suspend fun sendMessage(username1 : String, username2: String, type : String, message : String) {
+        members.forEach { t, u -> println(t) }
+        members[username2]?.send(Frame.Text("$type$MSG_SEPARATOR$username1$MSG_SEPARATOR$username2$MSG_SEPARATOR$message"))
+        if (type == MSG_CHAT) transaction {  ChatRepository.add(username1 = username1, username2 = username2, message = message) }
     }
 
     suspend fun broadcast(username : String) {
-        for ((key, value) in members) {
-            if (key != username) { value.send(frame = Frame.Text("$MSG_ONLINE$MSG_SEPARATOR$username")) }
-        }
+        for ((key, value) in members) if (key != username) { value.send(frame = Frame.Text("$MSG_ONLINE$MSG_SEPARATOR$username")) }
     }
 
 }

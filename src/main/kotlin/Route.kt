@@ -63,12 +63,8 @@ fun Routing.homeRoute() {
                     user = UserRepository.getByUsername(username)
                     onlines = UserRepository.getAll(Users.isOnline eq true).filter { it.username != username }
                 }
-                if (user!!.score == 0){
-                    call.respondRedirect(application.locations.href(InfoUrl(username)))
-                } else {
-                   // Chat.memberJoin(username)
-                    call.homePage(user!!, users, onlines)
-                }
+                if (user!!.score == 0) call.respondRedirect(application.locations.href(InfoUrl(username))) else call.homePage(user!!, users, onlines)
+
             }
         }
     }
@@ -192,15 +188,18 @@ fun Routing.activateRoute() {
 fun Routing.userRoute() {
     get<UserUrl> { userUrl ->
         var user: User? = null
-        val session = call.sessions.get<Session>()
-        if (session == null) call.respondRedirect(application.locations.href(LoginUrl()))
+        var currentUser : User? = null
+        val username = call.sessions.get<Session>()?.username
+        if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
             transaction {
                 user = UserRepository.getByUsername(userUrl.username)
+                currentUser = UserRepository.getByUsername(username)
+
             }
-            if (user == null) call.respondRedirect(application.locations.href(HomeUrl()))
+            if (user == null || currentUser == null) call.respondRedirect(application.locations.href(HomeUrl()))
             else {
-                if (user!!.username.equals(session.username)) {
+                if (user!!.username == username) {
                     val likes: MutableList<User> = mutableListOf<User>()
                     val likeds: MutableList<User> = mutableListOf<User>()
                     val visits: MutableList<User> = mutableListOf<User>()
@@ -208,19 +207,18 @@ fun Routing.userRoute() {
                     val bloques: MutableList<User> = mutableListOf<User>()
                     var chats : List<User> = listOf()
                     transaction {
-                        VisitRepository.getVisits(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { visits.add(it) } }
-                        VisitRepository.getVisiteds(session.username).forEach { UserRepository.getByUsername(it.username1)?.let { visiteds.add(it) } }
-                        LikeRepository.getLikes(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { likes.add(it) } }
-                        LikeRepository.getLikeds(session.username).forEach { UserRepository.getByUsername(it.username1)?.let { likes.add(it) } }
-                        BloqueRepository.getBloques(session.username).forEach { UserRepository.getByUsername(it.username2)?.let { bloques.add(it) } }
-                        chats = ChatRepository.getChats(session.username)
+                        VisitRepository.getVisits(username).forEach { UserRepository.getByUsername(it.username2)?.let { visits.add(it) } }
+                        VisitRepository.getVisiteds(username).forEach { UserRepository.getByUsername(it.username1)?.let { visiteds.add(it) } }
+                        LikeRepository.getLikes(username).forEach { UserRepository.getByUsername(it.username2)?.let { likes.add(it) } }
+                        LikeRepository.getLikeds(username).forEach { UserRepository.getByUsername(it.username1)?.let { likes.add(it) } }
+                        BloqueRepository.getBloques(username).forEach { UserRepository.getByUsername(it.username2)?.let { bloques.add(it) } }
+                        chats = ChatRepository.getChats(username)
                     }
                     call.profilPage(user!!, likes, likeds, visits, visiteds, bloques, chats)
                 } else {
-                    transaction {
-                        VisitRepository.add(session.username, user!!.username)
-                    }
-                    call.userPage(user!!)
+                    transaction { VisitRepository.add(username, user!!.username) }
+                    Chat.sendMessage(username1 = username, username2 = user!!.username, type = MSG_VISIT, message = "visits you")
+                    call.userPage(user!!, currentUser!!)
                 }
             }
         }
@@ -266,6 +264,7 @@ fun Routing.likeRoute() {
             transaction {
                 LikeRepository.like(username, likeUrl.username)
             }
+            Chat.sendMessage(username1 = username, username2 = likeUrl.username, type = MSG_LIKE, message = "likes you")
             call.respondRedirect(application.locations.href(UserUrl(likeUrl.username)))
         }
     }
@@ -279,6 +278,7 @@ fun Routing.unlikeRoute() {
             transaction {
                 LikeRepository.unlike(username, unlikeUrl.username)
             }
+            Chat.sendMessage(username1 = username, username2 = unlikeUrl.username, type = MSG_UNLIKE, message = "unlikes you")
             call.respondRedirect(application.locations.href(UserUrl(unlikeUrl.username)))
         }
     }

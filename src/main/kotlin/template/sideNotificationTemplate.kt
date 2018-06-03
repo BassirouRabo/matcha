@@ -4,7 +4,7 @@ import data.User
 import io.ktor.locations.locations
 import kotlinx.html.*
 
-fun DIV.sideOnlineTemplate( onlines: List<User>) {
+fun DIV.sideNotificationTemplate( onlines: List<User>) {
     div(classes = "col-lg-3") {
         div(classes = "suggestionsth full-width") {
             div(classes = "sd-title") {
@@ -29,6 +29,13 @@ fun DIV.sideOnlineTemplate( onlines: List<User>) {
                     }
                 }
             }
+        }
+
+        div(classes = "suggestionsth full-width") {
+            div(classes = "sd-title") {
+                h3 { + "Notifications" }
+            }
+            div(classes = "suggestions-list") { id = "notification" }
         }
     }
 }

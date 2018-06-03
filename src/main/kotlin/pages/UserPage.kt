@@ -9,11 +9,11 @@ import kotlinx.html.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.BloqueRepository
 import repository.LikeRepository
+import repository.UserRepository
 import template.*
 
-suspend fun ApplicationCall.userPage(user: User) {
-
-    val username = sessions.get<Session>()!!.username
+suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
+   
 
     respondHtml {
         head { headTemplate(user.username) }
@@ -22,7 +22,7 @@ suspend fun ApplicationCall.userPage(user: User) {
 
             div(classes = "wrapper") {
 
-                headerTemplate(username)
+                headerTemplate(user.username)
 
                 coverTemplate("user")
 
@@ -36,53 +36,44 @@ suspend fun ApplicationCall.userPage(user: User) {
                                             div(classes = "user_profile") {
                                                 div(classes = "user-pro-img") {
                                                     img() {
-                                                        if (user.photo.equals("default"))
-                                                            src = "public/photos/170x170.png"
-                                                        else
-                                                            src = "public/photos/${user.photo}"
+                                                        src = if (user.photo.equals("default")) "public/photos/170x170.png" else "public/photos/${user.photo}"
                                                         alt = "Profil of ${user.username}"
                                                         width = "170"
                                                         height = "170"
                                                     }
                                                 }
-                                                if (user.photo.equals("default")
-                                                        && user.photo1.equals("default")
-                                                        && user.photo2.equals("default")
-                                                        && user.photo3.equals("default")
-                                                        && user.photo4.equals("default")
-                                                        && user.photo5.equals("default")
-                                                        && user.photo6.equals("default")) {
                                                     div(classes = "user_pro_status") {
-                                                        ul(classes = "flw-hr") {
-                                                            li {
-                                                                transaction {
-                                                                    val matching = LikeRepository.getMatch(username, user.username)
-                                                                    if (matching == Matching.A1B) {
-                                                                        a(classes = "pending") {
-                                                                            href = locations.href(UnLikeUrl(user.username))
-                                                                            title = "Unlike"
-                                                                            i(classes = "la la-times-circle") {}
-                                                                            +"pending"
-                                                                        }
-                                                                    } else if (matching == Matching.A2B) {
-                                                                        a(classes = "like") {
-                                                                            href = locations.href(UnLikeUrl(user.username))
-                                                                            title = "Unlike"
-                                                                            i(classes = "la la-users") {}
-                                                                            +"Unlike"
-                                                                        }
-                                                                        a(classes = "like") {
-                                                                            href = "#"
-                                                                            title = "Message"
-                                                                            i(classes = "fa fa-envelope")
-                                                                            +"Message"
-                                                                        }
-                                                                    } else {
-                                                                        a(classes = "unlike") {
-                                                                            href = locations.href(LikeUrl(user.username))
-                                                                            title = "like"
-                                                                            i(classes = "la la-plus") {}
-                                                                            +"Like"
+                                                        if (currentUser.photo != "default" || currentUser.photo1 != "default" || currentUser.photo2 != "default" || currentUser.photo3 != "default" || currentUser.photo4 != "default" || currentUser.photo5 != "default" && currentUser.photo6 != "default") {
+                                                            ul(classes = "flw-hr") {
+                                                                li {
+                                                                    transaction {
+                                                                        when (LikeRepository.getMatch(currentUser.username, user.username)) {
+                                                                            Matching.A1B -> a(classes = "pending") {
+                                                                                href = locations.href(UnLikeUrl(user.username))
+                                                                                title = "Unlike"
+                                                                                i(classes = "la la-times-circle") {}
+                                                                                +"pending"
+                                                                            }
+                                                                            Matching.A2B -> {
+                                                                                a(classes = "like") {
+                                                                                    href = locations.href(UnLikeUrl(user.username))
+                                                                                    title = "Unlike"
+                                                                                    i(classes = "la la-users") {}
+                                                                                    +"Unlike"
+                                                                                }
+                                                                                a(classes = "like") {
+                                                                                    href = locations.href(ChatUrl(username1 = currentUser.username, username2 = user.username))
+                                                                                    title = "Message"
+                                                                                    i(classes = "fa fa-envelope")
+                                                                                    +"Message"
+                                                                                }
+                                                                            }
+                                                                            else -> a(classes = "unlike") {
+                                                                                href = locations.href(LikeUrl(user.username))
+                                                                                title = "like"
+                                                                                i(classes = "la la-plus") {}
+                                                                                +"Like"
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -91,7 +82,7 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                         ul(classes = "flw-hr") {
                                                             var bloque : Bloque? = null
                                                             transaction {
-                                                                bloque  = BloqueRepository.get(username, user.username)
+                                                                bloque  = BloqueRepository.get(currentUser.username, user.username)
                                                             }
                                                             if (bloque == null) {
                                                                 li {
@@ -113,7 +104,6 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                                 }
                                                             }
                                                         }
-
                                                         ul(classes = "flw-hr") {
                                                             li {
                                                                 a(classes = "logout") {
@@ -125,7 +115,6 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                             }
                                                         }
                                                     }
-                                                }
                                                 infoTemplete(user)
                                             }
                                         }
@@ -133,9 +122,9 @@ suspend fun ApplicationCall.userPage(user: User) {
                                     div(classes = "col-lg-9") {
                                         div(classes = "main-ws-sec") {
                                             div(classes = "user-tab-sec") {
-                                                h3 { +"Brabo Hi" }
+                                                h3 { + user.username }
                                                 div(classes = "star-descp") {
-                                                    span { +"Bassirou Rabo Hima" }
+                                                    span { + "${user.firstName} ${user.lastName}" }
                                                 }
                                                 div(classes = "tab-feed") {
                                                     ul {
@@ -178,12 +167,12 @@ suspend fun ApplicationCall.userPage(user: User) {
                                                 div(classes = "portfolio-gallery-sec") {
                                                     div(classes = "gallery_pf") {
                                                         div(classes = "row") {
-                                                            if (!user.photo1.equals("default")) photoTemplate(user.photo1)
-                                                            if (!user.photo2.equals("default")) photoTemplate(user.photo2)
-                                                            if (!user.photo3.equals("default")) photoTemplate(user.photo3)
-                                                            if (!user.photo4.equals("default")) photoTemplate(user.photo4)
-                                                            if (!user.photo5.equals("default")) photoTemplate(user.photo5)
-                                                            if (!user.photo6.equals("default")) photoTemplate(user.photo6)
+                                                            if (user.photo1 != "default") photoTemplate(user.photo1)
+                                                            if (user.photo2 != "default") photoTemplate(user.photo2)
+                                                            if (user.photo3 != "default") photoTemplate(user.photo3)
+                                                            if (user.photo4 != "default") photoTemplate(user.photo4)
+                                                            if (user.photo5 != "default") photoTemplate(user.photo5)
+                                                            if (user.photo6 != "default") photoTemplate(user.photo6)
                                                         }
                                                     }
                                                 }
@@ -201,6 +190,7 @@ suspend fun ApplicationCall.userPage(user: User) {
             }
 
             scripTempate()
+            hiddenTemplate(currentUser.username, user.username)
         }
 
     }
