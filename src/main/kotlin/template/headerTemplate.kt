@@ -20,8 +20,8 @@ fun DIV.headerTemplate(username: String): Unit {
                         a {
                             href = "/$username"
                             title = username
-                            i(classes = "la la-tasks") {}
-                            +username.toUpperCase()
+                            i(classes = "la la-credit-card") {}
+                            + " ${username.toUpperCase()}"
                         }
                     }
                 }

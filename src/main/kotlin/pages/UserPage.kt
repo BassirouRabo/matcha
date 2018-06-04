@@ -7,10 +7,13 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import kotlinx.html.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import repository.BloqueRepository
 import repository.LikeRepository
 import repository.UserRepository
 import template.*
+import java.text.SimpleDateFormat
 
 suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
    
@@ -36,7 +39,7 @@ suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
                                             div(classes = "user_profile") {
                                                 div(classes = "user-pro-img") {
                                                     img() {
-                                                        src = if (user.photo.equals("default")) "public/photos/170x170.png" else "public/photos/${user.photo}"
+                                                        src = if (user.photo == "default") "public/photos/170x170.png" else "/public/photos/${user.photo}"
                                                         alt = "Profil of ${user.username}"
                                                         width = "170"
                                                         height = "170"
@@ -125,6 +128,10 @@ suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
                                                 h3 { + user.username }
                                                 div(classes = "star-descp") {
                                                     span { + "${user.firstName} ${user.lastName}" }
+                                                    span {
+                                                        i(classes = "fa fa-clock-o") {}
+                                                          if (user.isOnline)  + " online" else  + " ${user.date.toString(DateTimeFormat.mediumDateTime())}"
+                                                    }
                                                 }
                                                 div(classes = "tab-feed") {
                                                     ul {
@@ -149,7 +156,7 @@ suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
                                                                     src = "images/ic3.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Photos" }
+                                                                span { + "Photos" }
                                                             }
                                                         }
                                                     }

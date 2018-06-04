@@ -40,7 +40,7 @@ object LikeRepository {
         return get(Likes.username1.eq(username1) and Likes.username2.eq(username2))
     }
 
-    fun like(username1: String, username2: String): Unit {
+    fun like(username1: String, username2: String) {
         if (get(username1, username2) == null) add(username1, username2)
     }
 

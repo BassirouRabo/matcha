@@ -22,7 +22,7 @@ object Chat {
                 }
             }
             members[user.username] = socket
-            broadcast(user.username)
+            broadcast(user)
         }
     }
 
@@ -42,8 +42,9 @@ object Chat {
         if (type == MSG_CHAT) transaction {  ChatRepository.add(username1 = username1, username2 = username2, message = message) }
     }
 
-    suspend fun broadcast(username : String) {
-        for ((key, value) in members) if (key != username) { value.send(frame = Frame.Text("$MSG_ONLINE$MSG_SEPARATOR$username")) }
+    suspend fun broadcast(user : User) {
+        val src = if (user.photo == "default") "/public/images/profile_default.jpg" else "/public/photos/${user.photo}"
+        for ((key, value) in members) if (key != user.username) { value.send(frame = Frame.Text("$MSG_ONLINE$MSG_SEPARATOR${user.username}$MSG_SEPARATOR$key$MSG_SEPARATOR$src")) }
     }
 
 }

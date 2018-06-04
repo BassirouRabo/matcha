@@ -47,13 +47,17 @@ import java.io.OutputStream
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.request.*
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import repository.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun Routing.homeRoute() {
     location<HomeUrl> {
         get {
             var user : User? = null
-            var onlines : List<User> = listOf()
+            val friends : MutableList<User> = mutableListOf()
+            val names : MutableList<String> = mutableListOf()
             val username : String? = call.sessions.get<Session>()?.username
             if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
             else {
@@ -61,9 +65,15 @@ fun Routing.homeRoute() {
                 transaction {
                     users = UserRepository.getAll()
                     user = UserRepository.getByUsername(username)
-                    onlines = UserRepository.getAll(Users.isOnline eq true).filter { it.username != username }
+
+                    LikeRepository.getLikes(username).forEach { like ->
+                        LikeRepository.getLikeds(username).forEach {
+                            if (it.username1 == like.username2) names.add(like.username2)
+                        }
+                    }
+                    names.forEach { UserRepository.getByUsername(it)?.let { friends.add(it) } }
                 }
-                if (user!!.score == 0) call.respondRedirect(application.locations.href(InfoUrl(username))) else call.homePage(user!!, users, onlines)
+                if (user!!.score == 0) call.respondRedirect(application.locations.href(InfoUrl(username))) else call.homePage(user!!, users, friends)
 
             }
         }

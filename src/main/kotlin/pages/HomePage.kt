@@ -15,11 +15,12 @@ import kotlinx.coroutines.experimental.io.readASCIILine
 import kotlinx.coroutines.experimental.io.writeBytes
 import kotlinx.coroutines.experimental.launch
 import kotlinx.html.*
+import org.joda.time.format.DateTimeFormat
 import template.*
 import java.net.InetSocketAddress
 import java.net.SocketAddress
 
-suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List<User>) {
+suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlines: List<User>) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -272,12 +273,17 @@ suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List
                                                                 a {
                                                                     href = locations.href(UserUrl(user.username))
                                                                     img {
-                                                                        src = "http://via.placeholder.com/50x50"
-                                                                        alt = ""
+                                                                        src = if (user.photo == "default") "/public/images/profile_default.jpg" else "/public/photos/${user.photo}"
+                                                                        alt = user.username
+                                                                        width = "50"
+                                                                        height = "50"
                                                                     }
                                                                     div(classes = "usy-name") {
                                                                         h3 { + user.username }
-                                                                        span { + user.firstName }
+                                                                        span {
+                                                                            i(classes = "fa fa-clock-o") {}
+                                                                            if (user.isOnline)  + " online" else  + " ${user.date.toString(DateTimeFormat.shortDateTime())}"
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -290,7 +296,9 @@ suspend fun ApplicationCall.homePage(user:User, users: List<User>, onlines: List
                                             }
                                         }
                                     }
-                                    sideNotificationTemplate(onlines)
+                                    div(classes = "col-lg-3") {
+                                        sideNotificationTemplate(currentUser, onlines)
+                                    }
                                 }
                             }
                         }
