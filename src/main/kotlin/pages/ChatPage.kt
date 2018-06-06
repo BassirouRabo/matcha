@@ -4,6 +4,7 @@ import Session
 import UserUrl
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion
 import data.User
+import getFriends
 import io.ktor.application.ApplicationCall
 import io.ktor.html.respondHtml
 import io.ktor.locations.locations
@@ -13,6 +14,8 @@ import kotlinx.html.*
 import template.*
 import kotlinx.html.*
 import kotlinx.html.dom.*
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 suspend fun ApplicationCall.chatPage(user1: User, user2: User, chats : List<data.Chat>) {
     val username = sessions.get<Session>()!!.username
@@ -53,14 +56,16 @@ suspend fun ApplicationCall.chatPage(user1: User, user2: User, chats : List<data
                     div(classes = "container") {
                         div(classes = "messages-sec") {
                             div(classes = "row") {
-
-                                div(classes = "col-lg-12 col-md-12 pd-right-none pd-left-none") {
+                                div(classes = "col-lg-3") {
+                                    sideNotificationTemplate(user1, getFriends(user1.username))
+                                }
+                                div(classes = "col-lg-9 col-md-12 pd-right-none pd-left-none") {
                                     div(classes = "main-conversation-box") {
                                         div(classes = "message-bar-head") {
                                             div(classes = "usr-msg-details") {
                                                 div(classes = "usr-ms-img") {
                                                     img {
-                                                        if (user2.photo.equals("default")) src = "/public/photos/50x50.png" else src = "/public/photos/${user2.photo}"
+                                                        src = if (user2.photo == "default") "/public/photos/50x50.png" else "/public/photos/${user2.photo}"
                                                         alt = user2.username
                                                     }
                                                 }
@@ -75,22 +80,24 @@ suspend fun ApplicationCall.chatPage(user1: User, user2: User, chats : List<data
                                                 i(classes = "fa fa-ellipsis-v")
                                             }
                                         }
-                                        // div(classes = "messages-line")
-                                        div {
-                                            id =  "message"
-                                            chats.forEach { if (it.username1 == username) chatInTemplate(it) else if (it.username2 == username) chatOutTemplate(it) }
+                                        div(classes = "messages-line"){
+                                            chats.forEach { if (it.username1 == username) chatOutTemplate(it) else if (it.username2 == username) chatInTemplate(it) }
+                                            div{id =  "chats"}
                                         }
-                                        div(classes = "messages-line") { id = ""  }
                                         div(classes = "message-send-area") {
                                             div(classes = "mf-field") {
                                                 textInput {
                                                     id = "text"
                                                     name = "message"
-                                                    placeholder = "Type a message here"
+                                                    placeholder = "Type a message here..."
                                                 }
                                                 button {
                                                     id = "btn"
                                                     +"Send"
+                                                }
+                                                hiddenInput {
+                                                    id = "date"
+                                                    value =  DateTime().toString(DateTimeFormat.shortDateTime())
                                                 }
                                             }
                                         }

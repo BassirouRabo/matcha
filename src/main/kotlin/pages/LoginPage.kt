@@ -36,6 +36,7 @@ suspend fun ApplicationCall.loginPage() {
                                                                 name = Users.username.name
                                                                 placeholder = "Username"
                                                                 required = true
+                                                                pattern = "[A-Za-z ]{1,15}"
                                                             }
                                                             i(classes = "la la-user") {}
                                                         }

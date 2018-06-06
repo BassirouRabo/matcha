@@ -18,6 +18,7 @@ import io.ktor.sessions.sessions
 import kotlinx.html.*
 import template.*
 import PhotoUrl
+import getFriends
 
 suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: List<User>, visits: List<User>, visiteds: List<User>, bloques : List<User>, chats : List<User>) {
     val username = sessions.get<Session>()!!.username
@@ -55,6 +56,25 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                 }
                                                 infoTemplete(user)
                                             }
+                                            div(classes = "widget widget-portfolio") {
+                                                div(classes = "wd-heady") {
+                                                    h3 { +"My Photos" }
+                                                    img {
+                                                        src = "public/images/photo-icon.png"
+                                                        alt = ""
+                                                    }
+                                                }
+                                                div(classes = "pf-gallery") {
+                                                    ul {
+                                                        if (!user.photo1.equals("default")) sidePhotoTemplate(user.photo1)
+                                                        if (!user.photo2.equals("default")) sidePhotoTemplate(user.photo2)
+                                                        if (!user.photo3.equals("default")) sidePhotoTemplate(user.photo3)
+                                                        if (!user.photo4.equals("default")) sidePhotoTemplate(user.photo4)
+                                                        if (!user.photo5.equals("default")) sidePhotoTemplate(user.photo5)
+                                                        if (!user.photo6.equals("default")) sidePhotoTemplate(user.photo6)
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                     div(classes = "col-lg-6") {
@@ -72,7 +92,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = ""
                                                                 img() {
-                                                                    src = "public/images/ic2.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
                                                                 span { + "Info" }
@@ -84,10 +104,10 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = ""
                                                                 img {
-                                                                    src = "public/images/ic4.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Like ${likes.size}" }
+                                                                span { + "Like" }
                                                             }
                                                         }
                                                         li {
@@ -96,10 +116,10 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = ""
                                                                 img {
-                                                                    src = "public/images/ic5.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Liked by ${likeds.size}" }
+                                                                span { +"Liked" }
                                                             }
                                                         }
                                                         li {
@@ -108,10 +128,10 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = ""
                                                                 img {
-                                                                    src = "public/images/ic3.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Visits ${visits.size}" }
+                                                                span { +"Visits" }
                                                             }
                                                         }
                                                         li {
@@ -120,10 +140,10 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = ""
                                                                 img {
-                                                                    src = "public/images/ic3.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Visited by ${visiteds.size}" }
+                                                                span { +"Visited" }
                                                             }
                                                         }
                                                         li {
@@ -132,10 +152,10 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = "Bloque"
                                                                 img {
-                                                                    src = "public/images/ic3.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
-                                                                span { +"Bloque ${bloques.size}" }
+                                                                span { +"Bloque" }
                                                             }
                                                         }
                                                         li {
@@ -144,10 +164,10 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                                 href = "#"
                                                                 title = "Message"
                                                                 img {
-                                                                    src = "public/images/ic3.png"
+                                                                    src = "public/images/ic1.png"
                                                                     alt = ""
                                                                 }
-                                                                span { + "Msg ${chats.size}" }
+                                                                span { + "Chat" }
                                                             }
                                                         }
                                                     }
@@ -233,35 +253,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                         }
                                     }
                                     div(classes = "col-lg-3") {
-                                        div(classes = "right-sidebar") {
-                                            div(classes = "message-btn") {
-                                                a(classes = "logout") {
-                                                    href = locations.href(LogoutUrl())
-                                                    title = "Sign out"
-                                                    i(classes = "la la-sign-out") {}
-                                                    +"Logout"
-                                                }
-                                            }
-                                            div(classes = "widget widget-portfolio") {
-                                                div(classes = "wd-heady") {
-                                                    h3 { +"My Photos" }
-                                                    img {
-                                                        src = "public/images/photo-icon.png"
-                                                        alt = ""
-                                                    }
-                                                }
-                                                div(classes = "pf-gallery") {
-                                                    ul {
-                                                        if (!user.photo1.equals("default")) sidePhotoTemplate(user.photo1)
-                                                        if (!user.photo2.equals("default")) sidePhotoTemplate(user.photo2)
-                                                        if (!user.photo3.equals("default")) sidePhotoTemplate(user.photo3)
-                                                        if (!user.photo4.equals("default")) sidePhotoTemplate(user.photo4)
-                                                        if (!user.photo5.equals("default")) sidePhotoTemplate(user.photo5)
-                                                        if (!user.photo6.equals("default")) sidePhotoTemplate(user.photo6)
-                                                    }
-                                                }
-                                            }
-                                        }
+                                        sideNotificationTemplate(user, getFriends(username))
                                     }
                                 }
                             }
@@ -287,11 +279,13 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                 name = Users.firstName.name
                                 value = user.firstName
                                 required = true
+                                pattern = "[A-Za-z ]{1,15}"
                             }
                             textInput {
                                 name = Users.lastName.name
                                 value = user.lastName
                                 required = true
+                                pattern = "[A-Za-z ]{1,15}"
                             }
                             emailInput {
                                 name = Users.email.name
@@ -333,7 +327,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                 name = Users.biography.name
                                 maxLength = "500"
                                 required = true
-                                +user.biography
+                                + user.biography
                             }
                             passwordInput {
                                 name = Users.password.name

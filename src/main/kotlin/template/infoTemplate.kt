@@ -27,6 +27,10 @@ fun DIV.infoTemplete(user: User)  {
             +"  ${getGender(user.gender)}"
         }
         li {
+            i(classes = "la la-tag") {}
+            +"  ${user.orientation}"
+        }
+        li {
             i(classes = "la la-flag") {}
             +"  ${getCampus(user.campus)}"
         }

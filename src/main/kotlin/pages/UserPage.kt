@@ -16,7 +16,6 @@ import template.*
 import java.text.SimpleDateFormat
 
 suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
-   
 
     respondHtml {
         head { headTemplate(user.username) }
@@ -122,7 +121,7 @@ suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
                                             }
                                         }
                                     }
-                                    div(classes = "col-lg-9") {
+                                    div(classes = "col-lg-6") {
                                         div(classes = "main-ws-sec") {
                                             div(classes = "user-tab-sec") {
                                                 h3 { + user.username }
@@ -185,6 +184,9 @@ suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
                                                 }
                                             }
                                         }
+                                    }
+                                    div(classes = "col-lg-3") {
+                                        sideNotificationTemplate(currentUser, getFriends(currentUser.username))
                                     }
                                 }
                             }

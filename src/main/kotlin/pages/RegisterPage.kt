@@ -38,6 +38,7 @@ suspend fun ApplicationCall.registerPage() {
                                                                 name = Users.firstName.name
                                                                 placeholder = "First Name"
                                                                 required = true
+                                                                pattern = "[A-Za-z ]{1,15}"
                                                             }
                                                             i(classes = "la la-user") {}
                                                         }
@@ -48,6 +49,7 @@ suspend fun ApplicationCall.registerPage() {
                                                                 name = Users.lastName.name
                                                                 placeholder = "Last Name"
                                                                 required = true
+                                                                pattern = "[A-Za-z ]{1,15}"
                                                             }
                                                             i(classes = "la la-user") {}
                                                         }
@@ -58,6 +60,7 @@ suspend fun ApplicationCall.registerPage() {
                                                                 name = Users.username.name
                                                                 placeholder = "Username"
                                                                 required = true
+                                                                pattern = "[A-Za-z-]{1,15}"
                                                             }
                                                             i(classes = "la la-user") {}
                                                         }

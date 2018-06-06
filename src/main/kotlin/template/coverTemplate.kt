@@ -5,14 +5,8 @@ import kotlinx.html.*
 fun DIV.coverTemplate(type : String): Unit {
     section(classes = "cover-sec") {
         img {
-            if (type.equals("user")) src = "public/photos/cover.png" else src = "public/photos/cover.jpg"
+            src = if (type == "user") "public/photos/cover.jpg" else "public/photos/cover1.jpg"
             alt = "Cover"
-        }
-        a() {
-            href = "#"
-            title = ""
-            +"Change Image"
-            i(classes = "fa fa-camera") {}
         }
     }
 }

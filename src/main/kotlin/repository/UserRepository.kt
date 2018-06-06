@@ -5,6 +5,7 @@ import PHOTOFULL
 import data.User
 import data.UserData
 import data.Users
+import org.apache.commons.codec.digest.DigestUtils
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
@@ -39,7 +40,7 @@ object UserRepository {
     }
 
     fun getByUsernameAndPassword(username: String, password: String): User? {
-        val users: List<User> = getAll(Users.username.eq(username) and Users.password.eq(password))
+        val users: List<User> = getAll(Users.username.eq(username) and Users.password.eq(DigestUtils.md5Hex(password).toUpperCase()))
         return if (users.isEmpty() || users.size != 1) null else users.first()
     }
 
@@ -56,7 +57,7 @@ object UserRepository {
             it[Users.firstName] = userData.firstName
             it[Users.lastName] = userData.lastName
             it[Users.age] = userData.age
-            it[Users.password] = userData.password
+            it[Users.password] = DigestUtils.md5Hex(userData.password).toUpperCase()
             it[Users.gender] = userData.gender
             it[Users.campus] = userData.campus
             it[Users.biography] = userData.biography

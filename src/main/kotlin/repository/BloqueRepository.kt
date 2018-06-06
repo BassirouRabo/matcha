@@ -40,6 +40,7 @@ object BloqueRepository {
     }
 
     fun bloque(username1: String, username2: String): Bloque? {
+        println("****")
         val bloque: Bloque? = get(username1, username2)
         if (bloque == null) {
             val id = Bloques.insertAndGetId {

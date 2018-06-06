@@ -2,6 +2,7 @@ import Campus.FREMONT
 import Campus.PARIS
 import Gender.FEMALE
 import Gender.MALE
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion
 import data.User
 import data.UserData
 import data.Users
@@ -56,25 +57,55 @@ fun Routing.homeRoute() {
     location<HomeUrl> {
         get {
             var user : User? = null
-            val friends : MutableList<User> = mutableListOf()
-            val names : MutableList<String> = mutableListOf()
             val username : String? = call.sessions.get<Session>()?.username
+            var friends : List<User> = listOf()
             if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
             else {
                 var users: List<User> = listOf()
                 transaction {
                     users = UserRepository.getAll()
                     user = UserRepository.getByUsername(username)
-
-                    LikeRepository.getLikes(username).forEach { like ->
-                        LikeRepository.getLikeds(username).forEach {
-                            if (it.username1 == like.username2) names.add(like.username2)
-                        }
-                    }
-                    names.forEach { UserRepository.getByUsername(it)?.let { friends.add(it) } }
                 }
-                if (user!!.score == 0) call.respondRedirect(application.locations.href(InfoUrl(username))) else call.homePage(user!!, users, friends)
 
+                if (user!!.score == 0) call.respondRedirect(application.locations.href(InfoUrl(username)))
+                else {
+                    // Block - is Activate, orientations, is _report
+                    friends = getFriends(username).filter { transaction { BloqueRepository.get(username, it.username) == null && it.isReport == false && it.isActivate } }
+                    users = users.filter {  transaction { BloqueRepository.get(username, it.username) == null } && it.orientation == user!!.orientation && !it.isReport && it.isActivate  && it.username != user!!.username }
+                            .sortedBy { it.campus }
+                    call.homePage(user!!, users, friends)
+                }
+
+            }
+        }
+        post{
+            var user : User? = null
+            var users: List<User> = listOf()
+            val username : String? = call.sessions.get<Session>()?.username
+            val params = call.receiveParameters()
+            if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
+            else {
+                transaction { user = UserRepository.getByUsername(username) }
+                if (user == null)  call.respondRedirect(application.locations.href(LoginUrl()))
+                else {
+                    val gender = if (params[Users.gender.name]!! == Gender.MALE.toString()) Gender.MALE else Gender.FEMALE
+                    val orientation = if (params[Users.orientation.name]!! == Orientation.BI.toString()) Orientation.BI else Orientation.HO
+                    val campus = if (params[Users.campus.name]!! == Campus.PARIS.toString()) Campus.PARIS else Campus.FREMONT
+
+                    val range = params["range"]!!.split(",")
+
+                    transaction { users = UserRepository.getAll(Users.isActivate.eq(true) and Users.isReport.eq(false) and Users.gender.eq(gender) and Users.orientation.eq(orientation) and Users.campus.eq(campus) ) }
+
+                    users.filter { it.username != username && it.age >= range[0].toInt() && it.age <= range[1].toInt() }.filter { transaction { BloqueRepository.get(username, it.username) == null  } }
+
+                    params["tagBio"]?.let { users.filter { it.tagBio } }
+                    params["tagGeek"]?.let { users.filter { it.tagGeek } }
+                    params["tagSmart"]?.let { users.filter { it.tagSmart } }
+                    params["tagPiercing"]?.let { users.filter { it.tagPiercing } }
+                    params["tagShy"]?.let { users.filter { it.tagShy } }
+
+                    call.homePage(user!!, users, getFriends(username))
+                }
             }
         }
     }
@@ -207,7 +238,7 @@ fun Routing.userRoute() {
                 currentUser = UserRepository.getByUsername(username)
 
             }
-            if (user == null || currentUser == null) call.respondRedirect(application.locations.href(HomeUrl()))
+           if (user == null || currentUser == null) call.respondRedirect(application.locations.href(HomeUrl()))
             else {
                 if (user!!.username == username) {
                     val likes: MutableList<User> = mutableListOf<User>()
@@ -318,11 +349,11 @@ fun Routing.infoRoute() {
         else {
             transaction {
                 user!!.orientation = if (params[Users.orientation.name].equals(Orientation.BI.toString())) Orientation.BI else Orientation.HO
-                user!!.tagBio = if (params[Users.tagBio.name] == null) false else true
-                user!!.tagGeek = if (params[Users.tagGeek.name] == null) false else true
-                user!!.tagPiercing = if (params[Users.tagPiercing.name] == null) false else true
-                user!!.tagSmart = if (params[Users.tagSmart.name] == null) false else true
-                user!!.tagShy = if (params[Users.tagShy.name] == null) false else true
+                user!!.tagBio = params[Users.tagBio.name] != null
+                user!!.tagGeek = params[Users.tagGeek.name] != null
+                user!!.tagPiercing = params[Users.tagPiercing.name] != null
+                user!!.tagSmart = params[Users.tagSmart.name] != null
+                user!!.tagShy = params[Users.tagShy.name] != null
                 user!!.score = 1
             }
             call.respondRedirect(application.locations.href(HomeUrl()))

@@ -50,13 +50,7 @@ fun DIV.footerTemplate(): Unit {
                         }
                     }
                 }
-                p {
-                    +"Copyright 2018"
-                    img {
-                        src = "/public/images/copy-icon2.png"
-                        alt = ""
-                    }
-                }
+                p { + "Copyright 2018" }
             }
         }
     }

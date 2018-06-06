@@ -19,8 +19,9 @@ import org.joda.time.format.DateTimeFormat
 import template.*
 import java.net.InetSocketAddress
 import java.net.SocketAddress
+import HomeUrl
 
-suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlines: List<User>) {
+suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, friends: List<User>) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -44,7 +45,7 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlin
                                 }
                                 button {
                                     type = ButtonType.submit
-                                    +"Search"
+                                    + "Search"
                                 }
                             }
                         }
@@ -57,94 +58,105 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlin
                             div(classes = "main-section-data") {
                                 div(classes = "row") {
                                     div(classes = "col-lg-3") {
-                                        div(classes = "") {
+                                        form(locations.href(HomeUrl()), encType = FormEncType.multipartFormData, method = FormMethod.post){
                                             div(classes = "filter-secs full-width") {
                                                 div(classes = "filter-heading") {
                                                     h3 { +"Filters" }
-                                                    a(classes = "") {
-                                                        href = "#"
-                                                        title = ""
-                                                        +"Clear all filters"
-                                                    }
                                                 }
                                                 div(classes = "paddy") {
                                                     div(classes = "filter-dd") {
-                                                        form {
-                                                            textInput() {
-                                                                name = "search-skills"
-                                                                placeholder = "Search skills"
+                                                        div(classes = "filter-ttl") {
+                                                            h3 { + "Campus" }
+                                                        }
+                                                        ul(classes = "avail-checks") {
+                                                            li {
+                                                                radioInput {
+                                                                    name = "campus"
+                                                                    id = "campusPa"
+                                                                    checked = true
+                                                                    value = Campus.PARIS.toString()
+                                                                }
+                                                                label {
+                                                                    htmlFor = "campusPa"
+                                                                    span { }
+                                                                }
+                                                                small { + "Paris" }
+                                                            }
+                                                            li {
+                                                                radioInput {
+                                                                    name = "campus"
+                                                                    id = "campusFr"
+                                                                    value = Campus.FREMONT.toString()
+                                                                }
+                                                                label {
+                                                                    htmlFor = "campusFr"
+                                                                    span { }
+                                                                }
+                                                                small { + "Fremont" }
                                                             }
                                                         }
                                                     }
                                                     div(classes = "filter-dd") {
                                                         div(classes = "filter-ttl") {
-                                                            h3 { +"Campus" }
+                                                            h3 { + "Orientation" }
                                                         }
                                                         ul(classes = "avail-checks") {
                                                             li {
-                                                                radioInput() {
-                                                                    name = "cc"
-                                                                    id = "c1"
+                                                                radioInput {
+                                                                    name = "orientation"
+                                                                    id = "orientationBi"
+                                                                    checked = true
+                                                                    value = Orientation.BI.toString()
                                                                 }
                                                                 label {
-                                                                    htmlFor = "c1"
+                                                                    htmlFor = "orientationBi"
                                                                     span { }
                                                                 }
-                                                                small { +"Paris" }
+                                                                small { + "BI" }
                                                             }
                                                             li {
                                                                 radioInput {
-                                                                    name = "cc"
-                                                                    id = "c2"
+                                                                    name = "orientation"
+                                                                    id = "orientationHo"
+                                                                    value = Orientation.HO.toString()
                                                                 }
                                                                 label {
-                                                                    htmlFor = "c2"
+                                                                    htmlFor = "orientationHo"
                                                                     span { }
                                                                 }
-                                                                small { +"USA" }
+                                                                small { + "HO" }
                                                             }
                                                         }
                                                     }
                                                     div(classes = "filter-dd") {
                                                         div(classes = "filter-ttl") {
-                                                            h3 { +"Gender" }
+                                                            h3 { + "Gender" }
                                                         }
                                                         ul(classes = "avail-checks") {
                                                             li {
                                                                 radioInput {
-                                                                    name = "cc"
-                                                                    id = "c3"
+                                                                    name = "gender"
+                                                                    id = "genderMa"
+                                                                    checked = true
+                                                                    value = Gender.MALE.toString()
                                                                 }
                                                                 label {
-                                                                    htmlFor = "c3"
+                                                                    htmlFor = "genderMa"
                                                                     span { }
                                                                 }
                                                                 small { +"Male" }
                                                             }
                                                             li {
                                                                 radioInput {
-                                                                    name = "cc"
-                                                                    id = "c4"
+                                                                    name = "gender"
+                                                                    id = "genderFe"
+                                                                    value = Gender.FEMALE.toString()
                                                                 }
                                                                 label {
-                                                                    htmlFor = "c4"
+                                                                    htmlFor = "genderFe"
                                                                     span { }
                                                                 }
                                                                 small { +"Female" }
-                                                            }
-                                                        }
-                                                    }
-                                                    div(classes = "filter-dd") {
-                                                        div(classes = "filter-ttl") {
-                                                            h3 { +"Filter" }
-                                                        }
-                                                        form(classes = "job-tp") {
-                                                            select {
-                                                                option() { +"Filer 1" }
-                                                                option() { +"Filer 2" }
-                                                            }
-                                                            i(classes = "fa fa-ellipsis-v") {
-                                                                attributes["aria-hidden"] = "true"
                                                             }
                                                         }
                                                     }
@@ -155,40 +167,45 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlin
                                                         div(classes = "rg-slider") {
                                                             hiddenInput(classes = "rn-slider slider-input") {
                                                                 value = "5,50"
+                                                                required = true
+                                                                name = "range"
                                                             }
                                                         }
                                                         div(classes = "rg-limit") {
-                                                            h4 { +"1" }
-                                                            h4 { +"100" }
+                                                            h4 { + "1" }
+                                                            h4 { + "100" }
                                                         }
                                                     }
                                                     div(classes = "filter-dd") {
                                                         div(classes = "filter-ttl") {
-                                                            h3 { +"Experience Level" }
+                                                            h3 { + "Tags" }
                                                         }
-                                                        form(classes = "job-tp") {
-                                                            select {
-                                                                option() { +"Select a experience level" }
-                                                                option() { +"3 years" }
+                                                        ul(classes = "avail-checks") {
+                                                            li {
+                                                                checkBoxInput { name = "tagBio" }
+                                                                small { +"Bio diet" }
                                                             }
-                                                            i(classes = "fa fa-ellipsis-v") {
-                                                                attributes["aria-hidden"] = "true"
+                                                            li {
+                                                                checkBoxInput { name = "tagGeek" }
+                                                                small { + "Is geek" }
+                                                            }
+                                                            li {
+                                                                checkBoxInput { name = "tagPiercing" }
+                                                                small { + "has piercing" }
+                                                            }
+                                                            li {
+                                                                checkBoxInput { name = "tagSmart" }
+                                                                small { + "Is smart" }
+                                                            }
+                                                            li {
+                                                                checkBoxInput { name = "tagShy" }
+                                                                small { + "Is shy" }
                                                             }
                                                         }
                                                     }
-                                                    div(classes = "filter-dd") {
-                                                        div(classes = "filter-ttl") {
-                                                            h3 { +"Countries" }
-                                                        }
-                                                        form(classes = "job-tp") {
-                                                            select {
-                                                                option { +"Select a country" }
-                                                                option { +"Paris" }
-                                                                option { +"Fremont" }
-                                                            }
-                                                            i(classes = "fa fa-ellipsis-v") {
-                                                                attributes["aria-hidden"] = "true"
-                                                            }
+                                                    div(classes = "message-btn") {
+                                                        button {
+                                                            + "Send"
                                                         }
                                                     }
                                                 }
@@ -252,14 +269,6 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlin
                                                         }
                                                     }
                                                 }
-                                                div(classes = "cp-sec") {
-                                                    p {
-                                                        img(classes = "") {
-                                                            alt = ""
-                                                            src = "public/images/cp.png"
-                                                        }
-                                                    }
-                                                }
                                             }
                                         }
                                     }
@@ -284,6 +293,11 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlin
                                                                             i(classes = "fa fa-clock-o") {}
                                                                             if (user.isOnline)  + " online" else  + " ${user.date.toString(DateTimeFormat.shortDateTime())}"
                                                                         }
+                                                                        br {  }
+                                                                        span {
+                                                                            i(classes = "la la-star") {}
+                                                                            + user.score.toString()
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -297,7 +311,7 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, onlin
                                         }
                                     }
                                     div(classes = "col-lg-3") {
-                                        sideNotificationTemplate(currentUser, onlines)
+                                        sideNotificationTemplate(currentUser, friends)
                                     }
                                 }
                             }

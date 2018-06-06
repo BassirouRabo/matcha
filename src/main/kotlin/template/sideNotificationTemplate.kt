@@ -6,6 +6,14 @@ import kotlinx.html.*
 import org.joda.time.format.DateTimeFormat
 
 fun DIV.sideNotificationTemplate(currentUser: User, onlines: List<User>) {
+    div(classes = "message-btn") {
+        a(classes = "unlike") {
+            href = "/logout"
+            title = "Sign out"
+            i(classes = "la la-sign-out") {}
+            +"Logout"
+        }
+    }
     div(classes = "suggestionsth full-width") {
         div(classes = "sd-title") {
             h3 { + "Online" }
