@@ -91,10 +91,6 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                             a {
                                                                 href = "#"
                                                                 title = ""
-                                                                img() {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
                                                                 span { + "Info" }
                                                             }
                                                         }
@@ -102,11 +98,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                             attributes["data-tab"] = "like"
                                                             a {
                                                                 href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
+                                                                title = "Like"
                                                                 span { + "Like" }
                                                             }
                                                         }
@@ -114,36 +106,24 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                             attributes["data-tab"] = "liked"
                                                             a {
                                                                 href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { +"Liked" }
+                                                                title = "Liked"
+                                                                span { + "Liked" }
                                                             }
                                                         }
                                                         li {
                                                             attributes["data-tab"] = "visit"
                                                             a {
                                                                 href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { +"Visits" }
+                                                                title = "Visits"
+                                                                span { + "Visits" }
                                                             }
                                                         }
                                                         li {
                                                             attributes["data-tab"] = "visited"
                                                             a {
                                                                 href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { +"Visited" }
+                                                                title = "Visited"
+                                                                span { + "Visited" }
                                                             }
                                                         }
                                                         li {
@@ -151,10 +131,7 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                             a {
                                                                 href = "#"
                                                                 title = "Bloque"
-                                                                img {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
+
                                                                 span { +"Bloque" }
                                                             }
                                                         }
@@ -163,10 +140,6 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                                             a {
                                                                 href = "#"
                                                                 title = "Message"
-                                                                img {
-                                                                    src = "public/images/ic1.png"
-                                                                    alt = ""
-                                                                }
                                                                 span { + "Chat" }
                                                             }
                                                         }

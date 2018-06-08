@@ -1,5 +1,11 @@
 import data.User
+import io.ktor.application.Application
+import io.ktor.application.ApplicationCall
+import io.ktor.application.call
 import io.ktor.http.cio.websocket.*
+import io.ktor.locations.location
+import io.ktor.sessions.clear
+import io.ktor.sessions.sessions
 import kotlinx.coroutines.experimental.channels.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
@@ -23,12 +29,11 @@ object Chat {
                 }
             }
             members[user.username] = socket
-            broadcast(user)
+           // broadcast(user)
         }
     }
 
     fun memberLeft(user: User) {
-        println("left")
         members.remove(user.username)
         transaction {
             UserRepository.getByUsername(user.username)?.let {
@@ -38,9 +43,8 @@ object Chat {
         }
     }
 
-    suspend fun sendMessage(username1 : String, username2: String, type : String, message : String) {
-        members.forEach { t, u -> println(t) }
-        members[username2]?.send(Frame.Text("$type$MSG_SEPARATOR$username1$MSG_SEPARATOR$username2$MSG_SEPARATOR$message$MSG_SEPARATOR${DateTime().toString(DateTimeFormat.shortDateTime())}"))
+    suspend fun sendMessage(username1 : String, username2: String, type : String, message : String, photo: String) {
+        members[username2]?.send(Frame.Text("$type$MSG_SEPARATOR$username1$MSG_SEPARATOR$username2$MSG_SEPARATOR$message$MSG_SEPARATOR${DateTime().toString(DateTimeFormat.shortDateTime())}$MSG_SEPARATOR$photo"))
         if (type == MSG_CHAT) transaction {  ChatRepository.add(username1 = username1, username2 = username2, message = message) }
     }
 

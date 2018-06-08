@@ -138,23 +138,15 @@ suspend fun ApplicationCall.userPage(user: User, currentUser: User) {
                                                             attributes["data-tab"] = "info-dd"
                                                             a {
                                                                 href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "images/ic2.png"
-                                                                    alt = ""
-                                                                }
-                                                                span { +"Info" }
+                                                                title = "Info"
+                                                                span { + "Info" }
                                                             }
                                                         }
                                                         li(classes = "") {
                                                             attributes["data-tab"] = "portfolio-dd"
                                                             a {
                                                                 href = "#"
-                                                                title = ""
-                                                                img {
-                                                                    src = "images/ic3.png"
-                                                                    alt = ""
-                                                                }
+                                                                title = "Photos"
                                                                 span { + "Photos" }
                                                             }
                                                         }

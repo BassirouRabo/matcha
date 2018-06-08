@@ -32,6 +32,8 @@ object db {
     }
 
     fun init() {
+        val a = SELECT
+        val b = INSERT
         transaction {
             logger.addLogger(StdOutSqlLogger)
             create(Chats, Interests, Likes, Users, Visits, Bloques)

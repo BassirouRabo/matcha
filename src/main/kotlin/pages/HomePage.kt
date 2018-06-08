@@ -21,7 +21,7 @@ import java.net.InetSocketAddress
 import java.net.SocketAddress
 import HomeUrl
 
-suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, friends: List<User>) {
+suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, friends: List<User>, scores : Int) {
     val username = sessions.get<Session>()!!.username
 
     respondHtml {
@@ -296,7 +296,7 @@ suspend fun ApplicationCall.homePage(currentUser: User, users: List<User>, frien
                                                                         br {  }
                                                                         span {
                                                                             i(classes = "la la-star") {}
-                                                                            + user.score.toString()
+                                                                            + "${user.score} / $scores"
                                                                         }
                                                                     }
                                                                 }

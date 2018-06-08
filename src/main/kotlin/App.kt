@@ -1,9 +1,11 @@
 import data.User
 import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.content.default
 import io.ktor.content.files
 import io.ktor.content.static
+import io.ktor.features.CallLogging
 import io.ktor.features.ConditionalHeaders
 import io.ktor.features.DefaultHeaders
 import io.ktor.http.cio.websocket.*
@@ -15,10 +17,7 @@ import io.ktor.locations.locations
 import io.ktor.response.respondRedirect
 import io.ktor.routing.Routing
 import io.ktor.routing.routing
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
+import io.ktor.sessions.*
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.experimental.channels.consumeEach
@@ -77,7 +76,7 @@ fun Application.main() {
     val chat = Chat
 
     install(DefaultHeaders)
-    // install(CallLogging)
+    install(CallLogging)
     install(Locations)
     install(WebSockets)
     install(ConditionalHeaders)
@@ -126,9 +125,13 @@ fun Application.main() {
                     try {
                         incoming.mapNotNull { it as? io.ktor.http.cio.websocket.Frame.Text }.consumeEach { frame ->
                             val msg = frame.readText()
-                            if (msg != MSG_INIT) chat.sendMessage(username1 = user1!!.username, username2 = user2!!.username, type = MSG_CHAT, message = msg)
+                            val photo = if (user!!.photo == "default") "public/photos/35x35.png" else "/public/photos/${user!!.photo}"
+                            if (msg != MSG_INIT) chat.sendMessage(username1 = user1!!.username, username2 = user2!!.username, type = MSG_CHAT, message = msg, photo = photo)
                         }
-                    } finally { chat.memberLeft(user!!) }
+                    } finally {
+                        chat.memberLeft(user!!)
+                        call.sessions.clear<Session>()
+                    }
                 }
             }
         }

@@ -58,22 +58,22 @@ fun Routing.homeRoute() {
         get {
             var user : User? = null
             val username : String? = call.sessions.get<Session>()?.username
-            var friends : List<User> = listOf()
+            var friends : List<User>
+            var scores : Int = 0
             if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
             else {
                 var users: List<User> = listOf()
                 transaction {
-                    users = UserRepository.getAll()
+                    users = UserRepository.getAll().also { it.forEach { scores += it.score } }
                     user = UserRepository.getByUsername(username)
                 }
-
                 if (user!!.score == 0) call.respondRedirect(application.locations.href(InfoUrl(username)))
                 else {
                     // Block - is Activate, orientations, is _report
                     friends = getFriends(username).filter { transaction { BloqueRepository.get(username, it.username) == null && it.isReport == false && it.isActivate } }
-                    users = users.filter {  transaction { BloqueRepository.get(username, it.username) == null } && it.orientation == user!!.orientation && !it.isReport && it.isActivate  && it.username != user!!.username }
+                    users = users.filter { it.username != username }.filter {  transaction { BloqueRepository.get(username, it.username) == null } && it.orientation == user!!.orientation && !it.isReport && it.isActivate  && it.username != user!!.username }
                             .sortedBy { it.campus }
-                    call.homePage(user!!, users, friends)
+                    call.homePage(user!!, users, friends, scores)
                 }
 
             }
@@ -93,10 +93,12 @@ fun Routing.homeRoute() {
                     val campus = if (params[Users.campus.name]!! == Campus.PARIS.toString()) Campus.PARIS else Campus.FREMONT
 
                     val range = params["range"]!!.split(",")
+                    var scores : Int = 0
+                    transaction {  UserRepository.getAll().forEach { scores += it.score }  }
 
                     transaction { users = UserRepository.getAll(Users.isActivate.eq(true) and Users.isReport.eq(false) and Users.gender.eq(gender) and Users.orientation.eq(orientation) and Users.campus.eq(campus) ) }
 
-                    users.filter { it.username != username && it.age >= range[0].toInt() && it.age <= range[1].toInt() }.filter { transaction { BloqueRepository.get(username, it.username) == null  } }
+                    users = users.filter { transaction { BloqueRepository.get(username, it.username) == null  } }.filter { it.username != username && it.age >= range[0].toInt() && it.age <= range[1].toInt() }
 
                     params["tagBio"]?.let { users.filter { it.tagBio } }
                     params["tagGeek"]?.let { users.filter { it.tagGeek } }
@@ -104,7 +106,7 @@ fun Routing.homeRoute() {
                     params["tagPiercing"]?.let { users.filter { it.tagPiercing } }
                     params["tagShy"]?.let { users.filter { it.tagShy } }
 
-                    call.homePage(user!!, users, getFriends(username))
+                    call.homePage(user!!, users, getFriends(username), scores)
                 }
             }
         }
@@ -173,6 +175,9 @@ fun Routing.registerRoute() {
         val gender: String? = params[Users.gender.name]
         val campus: String? = params[Users.campus.name]
 
+        val random = Random().nextInt(9999 - 1000) + 1000
+
+
         if (username.equals(null)
                 || email.equals(null)
                 || firstName.equals(null)
@@ -184,10 +189,11 @@ fun Routing.registerRoute() {
             call.respondRedirect(application.locations.href(RegisterUrl()))
         } else {
             transaction {
-                logger.addLogger(StdOutSqlLogger)
                 val user: User? = UserRepository.getByUsername(username!!)
                 if (user == null) UserRepository.add(UserData(username = username, email = email!!, firstName = firstName!!, lastName = lastName!!, age = age!!, date = DateTime.now(), password = password!!, biography = "My biography", photo = photo
-                        ?: "default", isActivate = false, code = 1234, gender = if (gender.equals("Male")) MALE else FEMALE, campus = if (campus.equals("Paris")) PARIS else FREMONT))
+                        ?: "default", isActivate = false, code = random, gender = if (gender.equals("Male")) MALE else FEMALE, campus = if (campus.equals("Paris")) PARIS else FREMONT))?.let {
+                    Mail.sendMail(it.email, "Your activation code is : ${it.code}")
+                }
             }
             call.respondRedirect(application.locations.href(LoginUrl()))
         }
@@ -238,7 +244,7 @@ fun Routing.userRoute() {
                 currentUser = UserRepository.getByUsername(username)
 
             }
-           if (user == null || currentUser == null) call.respondRedirect(application.locations.href(HomeUrl()))
+            if (user == null || currentUser == null) call.respondRedirect(application.locations.href(HomeUrl()))
             else {
                 if (user!!.username == username) {
                     val likes: MutableList<User> = mutableListOf<User>()
@@ -258,7 +264,8 @@ fun Routing.userRoute() {
                     call.profilPage(user!!, likes, likeds, visits, visiteds, bloques, chats)
                 } else {
                     transaction { VisitRepository.add(username, user!!.username) }
-                    Chat.sendMessage(username1 = username, username2 = user!!.username, type = MSG_VISIT, message = "visits you")
+                    val photo = if (user!!.photo == "default") "public/photos/35x35.png" else "/public/photos/${user!!.photo}"
+                    Chat.sendMessage(username1 = username, username2 = user!!.username, type = MSG_VISIT, message = "visits you", photo = photo)
                     call.userPage(user!!, currentUser!!)
                 }
             }
@@ -300,13 +307,22 @@ fun Routing.chatRoute() {
 fun Routing.likeRoute() {
     get<LikeUrl> { likeUrl ->
         val username = call.sessions.get<Session>()?.username
+        var user : User? = null
         if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
-            transaction {
-                LikeRepository.like(username, likeUrl.username)
+            transaction {user = UserRepository.getByUsername(username) }
+
+            if (user == null) call.respondRedirect(application.locations.href(LoginUrl()))
+            else {
+                transaction {
+                    LikeRepository.like(username, likeUrl.username)
+                }
+
+                val photo = if (user!!.photo == "default") "public/photos/35x35.png" else "/public/photos/${user!!.photo}"
+                Chat.sendMessage(username1 = username, username2 = likeUrl.username, type = MSG_LIKE, message = "likes you", photo = photo)
+                call.respondRedirect(application.locations.href(UserUrl(likeUrl.username)))
+
             }
-            Chat.sendMessage(username1 = username, username2 = likeUrl.username, type = MSG_LIKE, message = "likes you")
-            call.respondRedirect(application.locations.href(UserUrl(likeUrl.username)))
         }
     }
 }
@@ -314,13 +330,20 @@ fun Routing.likeRoute() {
 fun Routing.unlikeRoute() {
     get<UnLikeUrl> { unlikeUrl ->
         val username = call.sessions.get<Session>()?.username
+        var user : User? = null
         if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
-            transaction {
-                LikeRepository.unlike(username, unlikeUrl.username)
+            transaction {user = UserRepository.getByUsername(username) }
+
+            if (user == null) call.respondRedirect(application.locations.href(LoginUrl()))
+            else {
+                transaction {
+                    LikeRepository.unlike(username, unlikeUrl.username)
+                }
+                val photo = if (user!!.photo == "default") "public/photos/35x35.png" else "/public/photos/${user!!.photo}"
+                Chat.sendMessage(username1 = username, username2 = unlikeUrl.username, type = MSG_UNLIKE, message = "unlikes you", photo = photo)
+                call.respondRedirect(application.locations.href(UserUrl(unlikeUrl.username)))
             }
-            Chat.sendMessage(username1 = username, username2 = unlikeUrl.username, type = MSG_UNLIKE, message = "unlikes you")
-            call.respondRedirect(application.locations.href(UserUrl(unlikeUrl.username)))
         }
     }
 }
@@ -380,7 +403,11 @@ fun Routing.photoRoute() {
                             when (part.name) {
                                 Users.username.name -> user!!.firstName = part.value
                                 Users.lastName.name -> user!!.lastName = part.value
-                                Users.email.name -> user!!.email = part.value
+                                Users.email.name -> {
+                                    val value = part.value
+                                    if (user!!.email != part.value) Mail.sendMail(user!!.email, "Your Email has been changed to $value")
+                                    user!!.email = value
+                                }
                                 Users.age.name -> user!!.age = part.value.toInt()
                                 Users.biography.name -> user!!.biography = part.value
                                 Users.password.name -> user!!.password = part.value
@@ -418,7 +445,7 @@ fun Routing.reportRoute() {
         val username = call.sessions.get<Session>()?.username
         if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
-           transaction {  UserRepository.report(reportUrl.username) }
+            transaction {  UserRepository.report(reportUrl.username) }
             call.respondRedirect(application.locations.href(HomeUrl()))
         }
     }
@@ -429,7 +456,7 @@ fun Routing.bloqueRoute() {
         val username = call.sessions.get<Session>()?.username
         if (username == null) call.respondRedirect(application.locations.href(LoginUrl()))
         else {
-           transaction {  BloqueRepository.bloque(username, bloqueUrl.username) }
+            transaction {  BloqueRepository.bloque(username, bloqueUrl.username) }
             call.respondRedirect(application.locations.href(HomeUrl()))
         }
     }
