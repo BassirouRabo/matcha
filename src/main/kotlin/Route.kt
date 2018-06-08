@@ -47,6 +47,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.request.*
+import org.apache.commons.codec.digest.DigestUtils
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import repository.*
@@ -410,7 +411,10 @@ fun Routing.photoRoute() {
                                 }
                                 Users.age.name -> user!!.age = part.value.toInt()
                                 Users.biography.name -> user!!.biography = part.value
-                                Users.password.name -> user!!.password = part.value
+                                Users.password.name -> {
+                                    val pass =  DigestUtils.md5Hex(part.value).toUpperCase()
+                                    user!!.password = pass
+                                }
                             }
                         }
                     }
