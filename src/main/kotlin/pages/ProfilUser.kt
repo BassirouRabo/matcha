@@ -296,6 +296,18 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                     +"Female"
                                 }
                             }
+                            select {
+                                name = Users.orientation.name
+                                required = true
+                                option {
+                                    value = Orientation.BI.toString()
+                                    +"BI"
+                                }
+                                option {
+                                    value = Orientation.HO.toString()
+                                    +"HO"
+                                }
+                            }
                             textArea {
                                 name = Users.biography.name
                                 maxLength = "500"

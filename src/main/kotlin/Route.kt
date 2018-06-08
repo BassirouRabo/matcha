@@ -101,7 +101,7 @@ fun Routing.homeRoute() {
 
                     users = users.filter { transaction { BloqueRepository.get(username, it.username) == null  } }.filter { it.username != username && it.age >= range[0].toInt() && it.age <= range[1].toInt() }
 
-                    params["tagBio"]?.let { users.filter { it.tagBio } }
+                    params["tagB0io"]?.let { users.filter { it.tagBio } }
                     params["tagGeek"]?.let { users.filter { it.tagGeek } }
                     params["tagSmart"]?.let { users.filter { it.tagSmart } }
                     params["tagPiercing"]?.let { users.filter { it.tagPiercing } }
@@ -408,6 +408,15 @@ fun Routing.photoRoute() {
                                     val value = part.value
                                     if (user!!.email != part.value) Mail.sendMail(user!!.email, "Your Email has been changed to $value")
                                     user!!.email = value
+                                }
+                                Users.campus.name -> {
+                                    user!!.campus =  if (part.value == Campus.PARIS.toString()) PARIS else FREMONT
+                                }
+                                Users.orientation.name -> {
+                                    user!!.orientation =  if (part.value == Orientation.BI.toString()) Orientation.BI else Orientation.HO
+                                }
+                                Users.gender.name -> {
+                                    user!!.gender =  if (part.value == Gender.MALE.toString()) MALE else FEMALE
                                 }
                                 Users.age.name -> user!!.age = part.value.toInt()
                                 Users.biography.name -> user!!.biography = part.value
