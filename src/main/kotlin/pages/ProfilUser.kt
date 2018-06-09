@@ -277,11 +277,12 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                 required = true
                                 option {
                                     value = Campus.PARIS.toString()
-                                    +"Paris"
+                                    + "Paris"
                                 }
                                 option {
                                     value = Campus.FREMONT.toString()
-                                    +"Fremont"
+                                    + "Fremont"
+                                    selected = user.campus == Campus.FREMONT
                                 }
                             }
                             select {
@@ -289,11 +290,11 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                 required = true
                                 option {
                                     value = Gender.MALE.toString()
-                                    +"Male"
+                                    + "Male"
                                 }
                                 option {
                                     value = Gender.FEMALE.toString()
-                                    +"Female"
+                                    + "Female"
                                 }
                             }
                             select {
@@ -301,11 +302,11 @@ suspend fun ApplicationCall.profilPage(user: User, likes: List<User>, likeds: Li
                                 required = true
                                 option {
                                     value = Orientation.BI.toString()
-                                    +"BI"
+                                    + "BI"
                                 }
                                 option {
                                     value = Orientation.HO.toString()
-                                    +"HO"
+                                    + "HO"
                                 }
                             }
                             textArea {
